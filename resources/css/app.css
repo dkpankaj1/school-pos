@@ -1,0 +1,22 @@
+@import "./animate.css";
+@import "./bootstrap.min.css";
+@import "./fontawesome/css/fontawesome.min.css";
+@import "./fontawesome/css/all.min.css";
+@import "./style.css";
+
+.slim-scroll {
+    width: 100%;
+}
+
+.dropdownHeaderMenu {
+    position: absolute;
+    inset: -35px 0px auto auto;
+    margin: 0px;
+    transform: translate(0px, 62px);
+}
+.mobileUserMenu {
+    position: absolute;
+    inset: -35px 20px auto auto;
+    margin: 0px;
+    transform: translate(-20px, 62px);
+}
