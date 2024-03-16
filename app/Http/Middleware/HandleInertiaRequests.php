@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Settings;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -37,7 +38,12 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            //
+            
+            'setting' => Settings::first(),
+            // Lazily...
+            'auth.user' => fn() => $request->user()
+                ? $request->user()->only('id', 'name', 'email')
+                : null,
         ]);
     }
 }

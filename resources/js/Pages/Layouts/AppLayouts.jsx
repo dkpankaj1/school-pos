@@ -4,7 +4,7 @@ import logo from "../../../assets/img/logo.png";
 import logoSm from "../../../assets/img/logo-small.png";
 import profileImg from "../../../assets/img/profiles/avator1.jpg";
 import Sidebar from "./Sidebar/Sidebar";
-import { Link, useForm } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 
 export const ThemeContext = createContext();
 function AppLayouts({ children }) {
@@ -13,6 +13,8 @@ function AppLayouts({ children }) {
     const [openUserMobileMenu, setOpenUserMobileMenu] = useState(false);
 
     const { post, processing } = useForm();
+
+    const { auth } = usePage().props;
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -110,12 +112,12 @@ function AppLayouts({ children }) {
                                             <span className="status online"></span>
                                         </span>
                                         <div className="profilesets">
-                                            <h6>John Doe</h6>
-                                            <h5>Admin</h5>
+                                            <h6>{auth.user.name}</h6>
+                                            <h5>{auth.user.name}</h5>
                                         </div>
                                     </div>
                                     <hr className="m-0" />
-                                    <a
+                                    {/* <a
                                         className="dropdown-item"
                                         href="profile.html"
                                     >
@@ -132,8 +134,8 @@ function AppLayouts({ children }) {
                                         ></i>
                                         Settings
                                     </a>
-                                    <hr className="m-0" />
-                                   
+                                    <hr className="m-0" /> */}
+
                                     <Link
                                         as="button"
                                         onClick={handleLogout}

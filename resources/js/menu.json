@@ -1,0 +1,23 @@
+[
+    {
+        "label" : "Dashboard",
+        "url" : "#",
+        "icon" : ""
+    },
+    {
+        "label" : "Product",
+        "url" : "#",
+        "icon" : "",
+        "sub" : [
+            {
+                "label" : "Dashboard",
+                "url" : "#"
+            },
+            {
+                "label" : "Dashboard",
+                "url" : "#"
+            }
+        ]
+
+    }
+]

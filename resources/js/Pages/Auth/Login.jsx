@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import Logo from "../../../assets/img/logo.png";
 import MailIcon from "../../../assets/img/icons/mail.svg";
 import SideImage from "../../../assets/img/login.jpg";
-import { useForm } from "@inertiajs/react";
+import { useForm,Head } from "@inertiajs/react";
 
 function Login() {
 
@@ -18,6 +18,10 @@ function Login() {
     };
 
     return (
+        <>
+        <Head>
+            <title>Login</title>
+        </Head>
         <div className="account-page">
             <div className="main-wrapper">
                 <div className="account-content">
@@ -76,7 +80,7 @@ function Login() {
                                                 {errors.password}
                                             </div>
                                         )}
-                                        <span className="fas toggle-password fa-eye-slash" onClick={() => setShowPassword(!showPassword)}></span>
+                                        <span className={`toggle-password fas ${showPassword ? "fa-eye" : "fa-eye-slash" }`} onClick={() => setShowPassword(!showPassword)}></span>
                                     </div>
                                 </div>
 
@@ -98,6 +102,7 @@ function Login() {
                 </div>
             </div>
         </div>
+        </>
     );
 }
 
