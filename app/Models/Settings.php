@@ -17,7 +17,7 @@ class Settings extends Model
         'state',
         'country',
         'logo',
-        'fev_icon',
+        'favicon',
         'currency_code',
         'currency_symbol',
     ];

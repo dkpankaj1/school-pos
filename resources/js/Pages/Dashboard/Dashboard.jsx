@@ -1,18 +1,21 @@
-import React from "react";
-import { Head } from "@inertiajs/react";
+import React, { lazy } from "react";
+import { Head, usePage } from "@inertiajs/react";
 import AppLayouts from "../Layouts/AppLayouts";
 
-import Dash1 from '../../../assets/img/icons/dash1.svg';
-import Dash2 from '../../../assets/img/icons/dash2.svg';
-import Dash3 from '../../../assets/img/icons/dash3.svg';
-import Dash4 from '../../../assets/img/icons/dash4.svg';
+import Dash1 from "../../../assets/img/icons/dash1.svg";
+import Dash2 from "../../../assets/img/icons/dash2.svg";
+import Dash3 from "../../../assets/img/icons/dash3.svg";
+import Dash4 from "../../../assets/img/icons/dash4.svg";
 
-import Product22 from '../../../assets/img/product/product22.jpg'
-import Product23 from '../../../assets/img/product/product23.jpg'
-import Product24 from '../../../assets/img/product/product24.jpg'
-import Product6 from '../../../assets/img/product/product6.jpg'
+import Product22 from "../../../assets/img/product/product22.jpg";
+import Product23 from "../../../assets/img/product/product23.jpg";
+import Product24 from "../../../assets/img/product/product24.jpg";
+import Product6 from "../../../assets/img/product/product6.jpg";
 
 function Dashboard() {
+
+    const  {setting} = usePage().props
+
     return (
         <AppLayouts>
             <Head>
@@ -24,20 +27,17 @@ function Dashboard() {
                     <div className="dash-widget">
                         <div className="dash-widgetimg">
                             <span>
-                                <img
-                                    src={Dash1}
-                                    alt="img"
-                                />
+                                <img src={Dash1} alt="img" />
                             </span>
                         </div>
                         <div className="dash-widgetcontent">
                             <h5>
-                                $
+                                {setting.currency_symbol}
                                 <span
                                     className="counters"
                                     data-count="307144.00"
                                 >
-                                    $307,144.00
+                                    307,144.00
                                 </span>
                             </h5>
                             <h6>Total Purchase Due</h6>
@@ -48,17 +48,14 @@ function Dashboard() {
                     <div className="dash-widget dash1">
                         <div className="dash-widgetimg">
                             <span>
-                                <img
-                                    src={Dash2}
-                                    alt="img"
-                                />
+                                <img src={Dash2} alt="img" />
                             </span>
                         </div>
                         <div className="dash-widgetcontent">
                             <h5>
-                                $
+                            {setting.currency_symbol}
                                 <span className="counters" data-count="4385.00">
-                                    $4,385.00
+                                    4,385.00
                                 </span>
                             </h5>
                             <h6>Total Sales Due</h6>
@@ -69,15 +66,12 @@ function Dashboard() {
                     <div className="dash-widget dash2">
                         <div className="dash-widgetimg">
                             <span>
-                                <img
-                                    src={Dash3}
-                                    alt="img"
-                                />
+                                <img src={Dash3} alt="img" />
                             </span>
                         </div>
                         <div className="dash-widgetcontent">
                             <h5>
-                                $
+                            {setting.currency_symbol}
                                 <span
                                     className="counters"
                                     data-count="385656.50"
@@ -93,15 +87,12 @@ function Dashboard() {
                     <div className="dash-widget dash3">
                         <div className="dash-widgetimg">
                             <span>
-                                <img
-                                    src={Dash4}
-                                    alt="img"
-                                />
+                                <img src={Dash4} alt="img" />
                             </span>
                         </div>
                         <div className="dash-widgetcontent">
                             <h5>
-                                $
+                            {setting.currency_symbol}
                                 <span
                                     className="counters"
                                     data-count="40000.00"
@@ -120,7 +111,16 @@ function Dashboard() {
                             <h5>Customers</h5>
                         </div>
                         <div className="dash-imgs">
-                            <i data-feather="user"></i>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-person"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                            </svg>
                         </div>
                     </div>
                 </div>
@@ -131,7 +131,17 @@ function Dashboard() {
                             <h5>Suppliers</h5>
                         </div>
                         <div className="dash-imgs">
-                            <i data-feather="user-check"></i>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-person-check"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                                <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
+                            </svg>
                         </div>
                     </div>
                 </div>
@@ -142,7 +152,17 @@ function Dashboard() {
                             <h5>Purchase Invoice</h5>
                         </div>
                         <div className="dash-imgs">
-                            <i data-feather="file-text"></i>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-file-text"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z" />
+                                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
+                            </svg>
                         </div>
                     </div>
                 </div>
@@ -153,7 +173,16 @@ function Dashboard() {
                             <h5>Sales Invoice</h5>
                         </div>
                         <div className="dash-imgs">
-                            <i data-feather="file"></i>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-file-earmark"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
+                            </svg>
                         </div>
                     </div>
                 </div>
@@ -167,24 +196,17 @@ function Dashboard() {
                                 Recently Added Products
                             </h4>
                             <div className="dropdown">
-        
                                 <ul
                                     className="dropdown-menu"
                                     aria-labelledby="dropdownMenuButton"
                                 >
                                     <li>
-                                        <a
-                                            href="#"
-                                            className="dropdown-item"
-                                        >
+                                        <a href="#" className="dropdown-item">
                                             Product List
                                         </a>
                                     </li>
                                     <li>
-                                        <a
-                                            href="#"
-                                            className="dropdown-item"
-                                        >
+                                        <a href="#" className="dropdown-item">
                                             Product Add
                                         </a>
                                     </li>

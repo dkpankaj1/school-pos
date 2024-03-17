@@ -1,20 +1,21 @@
 import React, { createContext, useState, useEffect } from "react";
 import logoutIcon from "../../../assets/img/icons/log-out.svg";
-import logo from "../../../assets/img/logo.png";
-import logoSm from "../../../assets/img/logo-small.png";
 import profileImg from "../../../assets/img/profiles/avator1.jpg";
 import Sidebar from "./Sidebar/Sidebar";
 import { Link, useForm, usePage } from "@inertiajs/react";
+import { ToastContainer,toast } from "react-toastify";
 
 export const ThemeContext = createContext();
 function AppLayouts({ children }) {
+    const { flash } = usePage().props;
+
     const [openSidebar, setOpenSidebar] = useState(false);
     const [openHeaderDropDown, setOpenHeaderDropDown] = useState(false);
     const [openUserMobileMenu, setOpenUserMobileMenu] = useState(false);
 
     const { post, processing } = useForm();
 
-    const { auth } = usePage().props;
+    const { auth, setting } = usePage().props;
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -30,6 +31,11 @@ function AppLayouts({ children }) {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
+
+    useEffect(() => {
+        flash.success && toast.success(flash.success);
+        flash.danger && toast.error(flash.danger);
+    }, [flash]);
 
     return (
         <ThemeContext.Provider
@@ -58,13 +64,9 @@ function AppLayouts({ children }) {
             >
                 <div className="header">
                     <div className="header-left active">
-                        <a href="" className="logo">
-                            <img src={logo} alt="" />
-                        </a>
-                        <a href="index.html" className="logo-small">
-                            <img src={logoSm} alt="" />
-                        </a>
-                        <a id="toggle_btn"> </a>
+                        <Link href={route('dashboard')} className="logo">
+                            <img src={setting.logo} alt="" />
+                        </Link>
                     </div>
 
                     <a
@@ -206,6 +208,7 @@ function AppLayouts({ children }) {
                 }
                 onClick={() => setOpenSidebar(!openSidebar)}
             ></div>
+            <ToastContainer />
         </ThemeContext.Provider>
     );
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Settings;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class SettingsController extends Controller
 {
@@ -12,7 +13,8 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        //
+        $settings = Settings::first();
+        return Inertia::render('Setting/List', ['settings' => $settings]);
     }
 
     /**
@@ -50,9 +52,41 @@ class SettingsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Settings $settings)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'company' => ['required'],
+            'phone' => ['required'],
+            'email' => ['required'],
+            'address' => ['required'],
+            'city' => ['required'],
+            'state' => ['required'],
+            'country' => ['required'],
+            'currency_code' => ['required'],
+            'currency_symbol' => ['required'],
+        ]);
+
+        try {
+            $setting = Settings::first();
+            $setting->update([
+                'company' => $request->company,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'address' => $request->address,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country,
+                'currency_code' => $request->currency_code,
+                'currency_symbol' => $request->currency_symbol,
+            ]);
+            return redirect()->route('setting.index')->with('success', 'Update success');
+        } catch (\Exception $e) {
+            return redirect()->route('setting.index')->with('danger', $e->getMessage());
+
+        }
+
+
+
     }
 
     /**

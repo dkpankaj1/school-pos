@@ -7,23 +7,20 @@ function SidebarItem({ item }) {
     const [isActive, setIsActive] = useState(false);
 
     useEffect(() => {
-        setIsActive(url === item.url);
+        setIsActive(window.location.href === item.url);
     }, [url, item.url]);
-    
+
     if (item.sub) {
         return (
-            <li
-                className={`submenu ${isActive ? "active" : ""}`}
-                onClick={() => setOpen(!open)}
-            >
-                <a className={open ? "sub-drop active" : ""}>
+            <li className={`submenu ${isActive ? "active" : ""}`} onClick={() => setOpen(!open)}>
+                <a className={`sub-drop ${open ? "active" : ""}`}>
                     <img src={item.icon} alt="img" />
                     <span>{item.label}</span>
                     <span className="menu-arrow"></span>
                 </a>
                 <ul style={{ display: open ? "block" : "none" }}>
                     {item.sub.map((subitem, index) => (
-                        <li key={index}>
+                        <li key={index} className={window.location.href === subitem.url ? "active" : ""}>
                             <Link href={subitem.url}>{subitem.label}</Link>
                         </li>
                     ))}

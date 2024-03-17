@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('country')->nullable();
             $table->binary('logo')->nullable();
-            $table->binary('fev_icon')->nullable();
+            $table->binary('favicon')->nullable();
             $table->string('currency_code')->nullable();
             $table->string('currency_symbol')->nullable();
             $table->timestamps();
