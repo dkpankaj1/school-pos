@@ -48,9 +48,10 @@ export const menu = [
         url: "",
         icon: ProductIcon,
         sub: [
-            { label: "List", url: "#" },
-            { label: "Add", url: "#" },
+            { label: "List", url: route('products.index') },
+            { label: "Add", url: route('products.create') },
             { label: "Categories", url: route('categories.index') },
+            { label: "Unit", url: route('units.index') },
         ],
     },
     {
@@ -76,11 +77,7 @@ export const menu = [
     },
     {
         label: "Settings",
-        url: "",
+        url: route('setting.index'),
         icon: SettingIcon,
-        sub: [
-            { label: "General", url: route('setting.index') },
-            { label: "Session", url: "#" },
-        ],
     }
 ];

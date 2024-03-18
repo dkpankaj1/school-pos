@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Enums\DatabaseEnum\CategoriesTable;
+use App\Enums\DatabaseEnum\UnitTable;
 
-class Categories extends Model
+class Unit extends Model
 {
     use HasFactory;
     protected $fillable = [
-       CategoriesTable::NAME,
-       CategoriesTable::DESCRIPTION,
-       CategoriesTable::FINANCE_YEAR,
+        UnitTable::NAME,
+        UnitTable::SHORTNAME,
+        UnitTable::DESCRIPTION,
+        UnitTable::FINANCE_YEAR,
     ];
 }

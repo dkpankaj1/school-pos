@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import logoutIcon from "../../../assets/img/icons/log-out.svg";
-import profileImg from "../../../assets/img/profiles/avator1.jpg";
+import profileImg from "../../../assets/img/avatar_robo.webp";
 import Sidebar from "./Sidebar/Sidebar";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { ToastContainer,toast } from "react-toastify";
@@ -115,7 +115,7 @@ function AppLayouts({ children }) {
                                         </span>
                                         <div className="profilesets">
                                             <h6>{auth.user.name}</h6>
-                                            <h5>{auth.user.name}</h5>
+                                            <h5>{setting.finance_year.name}</h5>
                                         </div>
                                     </div>
                                     <hr className="m-0" />

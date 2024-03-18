@@ -3,7 +3,9 @@
 use App\Http\Controllers\AuthSessionController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +24,10 @@ Route::middleware('auth')->group(function () {
    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
    Route::resource('categories',CategoriesController::class);
+   Route::resource('units',UnitController::class);
+
+   
+   Route::resource('products',ProductController::class);
    
    Route::get('setting',[SettingsController::class,'index'])->name('setting.index');
    Route::put('setting/update',[SettingsController::class,'update'])->name('setting.update');

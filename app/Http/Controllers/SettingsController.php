@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FinanceYears;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Enums\DatabaseEnum\SettingTable;
 
 class SettingsController extends Controller
 {
@@ -14,7 +16,8 @@ class SettingsController extends Controller
     public function index()
     {
         $settings = Settings::first();
-        return Inertia::render('Setting/List', ['settings' => $settings]);
+        $financeYear = FinanceYears::all();
+        return Inertia::render('Setting/List', ['settings' => $settings, 'financeYear' => $financeYear]);
     }
 
     /**
@@ -64,20 +67,22 @@ class SettingsController extends Controller
             'country' => ['required'],
             'currency_code' => ['required'],
             'currency_symbol' => ['required'],
+            'default_finance_year' => ['required']
         ]);
 
         try {
             $setting = Settings::first();
             $setting->update([
-                'company' => $request->company,
-                'phone' => $request->phone,
-                'email' => $request->email,
-                'address' => $request->address,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country' => $request->country,
-                'currency_code' => $request->currency_code,
-                'currency_symbol' => $request->currency_symbol,
+                SettingTable::COMPANY => $request->company,
+                SettingTable::PHONE => $request->phone,
+                SettingTable::EMAIL => $request->email,
+                SettingTable::ADDRESS => $request->address,
+                SettingTable::CITY => $request->city,
+                SettingTable::STATE => $request->state,
+                SettingTable::COUNTRY => $request->country,
+                SettingTable::CURRENCY_CODE => $request->currency_code,
+                SettingTable::CURRENCY_SYMBOL => $request->currency_symbol,
+                SettingTable::DEFAULT_FINANCE_YEAR => $request->default_finance_year
             ]);
             return redirect()->route('setting.index')->with('success', 'Update success');
         } catch (\Exception $e) {

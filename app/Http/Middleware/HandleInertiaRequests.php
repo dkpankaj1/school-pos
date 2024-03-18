@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
 
-            'setting' => Settings::first(),
+            'setting' => Settings::with(['finance_year'])->first(),
             
             // Lazily...
             'auth.user' => fn() => $request->user()

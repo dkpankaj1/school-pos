@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\DatabaseEnum\CategoriesTable;
+use App\Enums\DatabaseEnum\FinanceYearTable;
 
 return new class extends Migration
 {
@@ -11,10 +13,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create(CategoriesTable::TABLE, function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
+            $table->string(CategoriesTable::NAME);
+            $table->text( CategoriesTable::DESCRIPTION);
+            $table->unsignedBigInteger(CategoriesTable::FINANCE_YEAR);
+            $table->foreign(CategoriesTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE)->cascadeOnDelete();
             $table->timestamps();
         });
     }
