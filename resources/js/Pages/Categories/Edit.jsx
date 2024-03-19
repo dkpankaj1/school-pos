@@ -40,7 +40,7 @@ function Edit({ category }) {
                                     }
                                 />
                                 {errors.name && (
-                                    <div class="invalid-feedback d-block">
+                                    <div className="invalid-feedback d-block">
                                         {errors.name}
                                     </div>
                                 )}
@@ -56,7 +56,7 @@ function Edit({ category }) {
                                     }
                                 ></textarea>
                                 {errors.description && (
-                                    <div class="invalid-feedback d-block">
+                                    <div className="invalid-feedback d-block">
                                         {errors.description}
                                     </div>
                                 )}

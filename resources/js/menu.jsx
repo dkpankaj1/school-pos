@@ -39,8 +39,8 @@ export const menu = [
         sub: [
             { label: "Customer List", url: "#" },
             { label: "Add Customer", url: "#" },
-            { label: "Supplier List", url: "#" },
-            { label: "Add Supplier", url: "#" },
+            { label: "Supplier List", url: route('suppliers.index') },
+            { label: "Add Supplier", url: route('suppliers.create') },
         ],
     },
     {
