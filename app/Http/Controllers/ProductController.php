@@ -46,9 +46,9 @@ class ProductController extends Controller
             'description' => ["required", "string"],
             'mrp' => ["required", "numeric"],
             'cost' => ["required", "numeric"],
-            'image' => ["sometimes", "mimes:jpeg,jpg,png,gif"],
-            'category' => ["required", "string"],
-            'unit' => ["required", "string"],
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+            'category' => ["required", Rule::exists(Categories::class,'id')],
+            'unit' => ["required", Rule::exists(Unit::class,'id')],
         ]);
 
         try {
@@ -93,7 +93,7 @@ class ProductController extends Controller
     {
         $units = Unit::where(UnitTable::FINANCE_YEAR, $this->getFinanceYear())->latest()->get();
         $categories = Categories::where(CategoriesTable::FINANCE_YEAR, $this->getFinanceYear())->get();
-        return Inertia::render('Product/Create', ['product' => $product, 'units' => $units, 'categories' => $categories]);
+        return Inertia::render('Product/Edit', ['product' => $product, 'units' => $units, 'categories' => $categories]);
     }
 
     /**
@@ -102,14 +102,14 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $request->validate([
-            'code' => ["required", "string", Rule::unique(Product::class, 'code')],
+            'code' => ["required", "string", Rule::unique(Product::class, 'code')->ignore($product->id)],
             'name' => ["required", "string"],
             'description' => ["required", "string"],
             'mrp' => ["required", "numeric"],
             'cost' => ["required", "numeric"],
-            'image' => ["sometimes", "mimes:jpeg,jpg,png,gif"],
-            'category' => ["required", "string"],
-            'unit' => ["required", "string"],
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+            'category' => ["required", Rule::exists(Categories::class,'id')],
+            'unit' => ["required", Rule::exists(Unit::class,'id')],
         ]);
 
         try {
@@ -120,7 +120,6 @@ class ProductController extends Controller
                 ProductTable::DESCRIPTION => $request->description ?? $product->description,
                 ProductTable::MRP => $request->mrp ?? $product->mrp,
                 ProductTable::COST => $request->cost ?? $product->cost,
-                ProductTable::IMAGE => $product->image,
                 ProductTable::CATEGORIES => $request->category ?? $product->categories,
                 ProductTable::UNIT => $request->unit ?? $product->unit,
             ];

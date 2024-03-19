@@ -1,16 +1,19 @@
-import React from "react";
+import React,{useState} from "react";
 import AppLayouts from "../Layouts/AppLayouts";
 import { Head, useForm } from "@inertiajs/react";
 import PageHeader from "../Component/PageHeader";
 
 function Create({ units, categories }) {
-    const { data, setData, post, processing, progress, errors } = useForm({
+
+    const [imagePreview, setImagePreview] = useState("https://placehold.co/200x200")
+
+    const { data, setData, post, processing, progress,errors } = useForm({
         code: "",
         name: "",
         description: "",
         mrp: "",
         cost: "",
-        image: "",
+        image: undefined,
         category: "",
         unit: "",
     });
@@ -19,6 +22,15 @@ function Create({ units, categories }) {
     const handleSubmit = () => {
         post(route("products.store"));
     };
+
+    const handleImageInput = (e) => {
+        setData('image', e.target.files[0])
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImagePreview(reader.result);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    }
 
     return (
         <AppLayouts>
@@ -217,7 +229,7 @@ function Create({ units, categories }) {
                                 <div className="form-group">
                                     <label>Product Image</label>
                                     <img
-                                        src="https://placehold.co/200x200"
+                                        src={imagePreview}
                                         alt=""
                                     />
 
@@ -234,8 +246,7 @@ function Create({ units, categories }) {
                                     <input
                                         type="file"
                                         className="form-control"
-                                        onChange={(e) =>setData("image", e.target.files[0])
-                                        }
+                                        onChange={handleImageInput}
                                     />
                                     {errors.image && (
                                         <div className="invalid-feedback d-block">

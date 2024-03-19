@@ -41,16 +41,16 @@ function List({ products }) {
                             <tbody>
                                 {products.data.length === 0 ? (
                                     <tr>
-                                        <td colSpan="4" className="text-center">
-                                            No categories found.
+                                        <td colSpan="8" className="text-center">
+                                            No product found.
                                         </td>
                                     </tr>
                                 ) : (
                                     products.data.map((product,index) => (
                                         <tr key={index}>
                                             <td>
-                                                <div class="avatar avatar-lg">
-                                                    <img class="avatar-img rounded-circle" alt={product.name} src={product.images}/>
+                                                <div className="avatar avatar-lg">
+                                                    <img className="avatar-img rounded-circle" alt={product.name} src={product.images}/>
                                                 </div>
                                             </td>
                                             <td>{product.code}</td>
