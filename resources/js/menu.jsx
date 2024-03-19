@@ -7,6 +7,7 @@ import PurchaseIcon from '../assets/img/icons/purchase1.svg';
 import PeopleIcon from '../assets/img/icons/users1.svg';
 import ReturnIcon from '../assets/img/icons/return1.svg';
 import ReportIcon from '../assets/img/icons/time.svg';
+import StudentIcon from '../assets/img/icons/student.svg';
 
 export const menu = [
     {
@@ -33,12 +34,20 @@ export const menu = [
         ],
     },
     {
-        label: "People",
+        label: "Student",
+        url: "",
+        icon: StudentIcon,
+        sub: [
+            { label: "Student List", url: route('student.index') },
+            { label: "Add Student", url: route('student.create') },
+            { label: "Class", url: route('student-class.index') },
+        ],
+    },
+    {
+        label: "Supplier",
         url: "",
         icon: PeopleIcon,
         sub: [
-            { label: "Customer List", url: "#" },
-            { label: "Add Customer", url: "#" },
             { label: "Supplier List", url: route('suppliers.index') },
             { label: "Add Supplier", url: route('suppliers.create') },
         ],

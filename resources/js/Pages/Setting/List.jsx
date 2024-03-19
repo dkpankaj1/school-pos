@@ -5,8 +5,7 @@ import PageHeader from "../Component/PageHeader";
 import PageTitle from "../Component/PageTitle";
 
 function List({ settings, financeYear }) {
-    console.log(financeYear);
-
+  
     const { data, setData, put, processing, errors } = useForm({
         company: settings.company,
         phone: settings.phone,

@@ -32,7 +32,7 @@ class CategoriesController extends Controller
             Categories::create([
                 CategoriesTable::NAME => $request->name,
                 CategoriesTable::DESCRIPTION => $request->description ?? "No description",
-                CategoriesTable::FINANCE_YEAR => Settings::first()->finance_year_id
+                CategoriesTable::FINANCE_YEAR => $this->getFinanceYear(),
             ]);
             return redirect()->route('categories.index')->with('success', 'Categories Create Success');
 
