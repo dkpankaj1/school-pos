@@ -7,14 +7,16 @@ import Dash2 from "../../../assets/img/icons/dash2.svg";
 import Dash3 from "../../../assets/img/icons/dash3.svg";
 import Dash4 from "../../../assets/img/icons/dash4.svg";
 
+import BoxIcon from "../../../assets/img/icons/box.svg";
+
 import Product22 from "../../../assets/img/product/product22.jpg";
 import Product23 from "../../../assets/img/product/product23.jpg";
 import Product24 from "../../../assets/img/product/product24.jpg";
 import Product6 from "../../../assets/img/product/product6.jpg";
 
-function Dashboard() {
-
-    const  {setting} = usePage().props
+function Dashboard({ dashboardData }) {
+    console.log(dashboardData);
+    const { setting } = usePage().props;
 
     return (
         <AppLayouts>
@@ -53,7 +55,7 @@ function Dashboard() {
                         </div>
                         <div className="dash-widgetcontent">
                             <h5>
-                            {setting.currency_symbol}
+                                {setting.currency_symbol}
                                 <span className="counters" data-count="4385.00">
                                     4,385.00
                                 </span>
@@ -71,7 +73,7 @@ function Dashboard() {
                         </div>
                         <div className="dash-widgetcontent">
                             <h5>
-                            {setting.currency_symbol}
+                                {setting.currency_symbol}
                                 <span
                                     className="counters"
                                     data-count="385656.50"
@@ -92,7 +94,7 @@ function Dashboard() {
                         </div>
                         <div className="dash-widgetcontent">
                             <h5>
-                            {setting.currency_symbol}
+                                {setting.currency_symbol}
                                 <span
                                     className="counters"
                                     data-count="40000.00"
@@ -107,7 +109,7 @@ function Dashboard() {
                 <div className="col-lg-3 col-sm-6 col-12 d-flex">
                     <div className="dash-count">
                         <div className="dash-counts">
-                            <h4>100</h4>
+                            <h4>{dashboardData.studentCount}</h4>
                             <h5>Customers</h5>
                         </div>
                         <div className="dash-imgs">
@@ -127,7 +129,7 @@ function Dashboard() {
                 <div className="col-lg-3 col-sm-6 col-12 d-flex">
                     <div className="dash-count das1">
                         <div className="dash-counts">
-                            <h4>100</h4>
+                            <h4>{dashboardData.supplierCount}</h4>
                             <h5>Suppliers</h5>
                         </div>
                         <div className="dash-imgs">
@@ -148,8 +150,8 @@ function Dashboard() {
                 <div className="col-lg-3 col-sm-6 col-12 d-flex">
                     <div className="dash-count das2">
                         <div className="dash-counts">
-                            <h4>100</h4>
-                            <h5>Purchase Invoice</h5>
+                            <h4>{dashboardData.productCount}</h4>
+                            <h5>Product</h5>
                         </div>
                         <div className="dash-imgs">
                             <svg
@@ -157,11 +159,10 @@ function Dashboard() {
                                 width="16"
                                 height="16"
                                 fill="currentColor"
-                                className="bi bi-file-text"
+                                className="bi bi-box"
                                 viewBox="0 0 16 16"
                             >
-                                <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z" />
-                                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
+                                <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z" />
                             </svg>
                         </div>
                     </div>
