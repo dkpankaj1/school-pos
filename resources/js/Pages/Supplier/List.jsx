@@ -5,6 +5,8 @@ import PageHeader from "../Component/PageHeader";
 import AddIcon from "../../../assets/img/icons/plus.svg";
 import DeleteBtn from "../Component/DeleteBtn";
 import EditBtn from "../Component/EditBtn";
+import BasicFilter from '../Component/BasicFilter';
+import Pagination from '../Component/Pagination';
 
 function List({ supplier }) {
     return (
@@ -24,7 +26,10 @@ function List({ supplier }) {
 
             <div className="card">
                 <div className="card-body">
-                    <div className="table-responsive">
+                    
+                    <BasicFilter routeName={'suppliers.index'}/>
+
+                    <div className="table-responsive mb-3">
                         <table className="table">
                             <thead>
                                 <tr>
@@ -39,14 +44,14 @@ function List({ supplier }) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {supplier.length === 0 ? (
+                                {supplier.data.length === 0 ? (
                                     <tr>
                                         <td colSpan="8" className="text-center">
                                             No supplier found.
                                         </td>
                                     </tr>
                                 ) : (
-                                    supplier.map((item,index) => (
+                                    supplier.data.map((item,index) => (
                                         <tr key={index}>
                                             <td>{item.name}</td>
                                             <td>{item.email}</td>
@@ -65,6 +70,8 @@ function List({ supplier }) {
                             </tbody>
                         </table>
                     </div>
+
+                    <Pagination links={supplier.links}/>
                 </div>
             </div>
         </AppLayout>

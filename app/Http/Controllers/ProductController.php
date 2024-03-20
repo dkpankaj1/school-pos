@@ -6,12 +6,11 @@ use App\Enums\DatabaseEnum\CategoriesTable;
 use App\Enums\DatabaseEnum\ProductTable;
 use App\Enums\DatabaseEnum\UnitTable;
 use App\Enums\ImageEnum;
-use App\Filters\ByCode;
+use App\Filters\ByOrCode;
 use App\Filters\ByName;
 use App\Models\Categories;
 use App\Models\Product;
 use App\Models\Unit;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Validation\Rule;
@@ -29,7 +28,7 @@ class ProductController extends Controller
         $productQuery = Product::query()->with('category', 'unit')->where(ProductTable::FINANCE_YEAR, $this->getFinanceYear());
 
         $products = Pipeline::send($productQuery)->through([
-            ByCode::class,
+            ByOrCode::class,
             ByName::class,
         ])->thenReturn()->paginate(5)->withQueryString();
 

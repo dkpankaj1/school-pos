@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\Settings;
 use App\Models\Student;
 use App\Models\StudentClass;
+use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\User;
 use Carbon\Carbon;
@@ -94,5 +95,7 @@ class DatabaseSeeder extends Seeder
 
         Categories::factory(10)->create();
         Product::factory(100)->create();
+
+        Supplier::factory(20)->create();
     }
 }

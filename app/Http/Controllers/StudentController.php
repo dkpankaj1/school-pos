@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\DatabaseEnum\StudentClassTable;
 use App\Enums\DatabaseEnum\StudentTable;
-use App\Filters\ByEnrolmentNumber;
+use App\Filters\ByOrEnrolmentNumber;
 use App\Filters\ByName;
 use App\Models\Student;
 use App\Models\StudentClass;
@@ -23,7 +23,7 @@ class StudentController extends Controller
         $studentQuery = Student::query()->with('classes')->where(StudentTable::FINANCE_YEAR,$this->getFinanceYear());
 
         $students = Pipeline::send($studentQuery)->through([
-            ByEnrolmentNumber::class,
+            ByOrEnrolmentNumber::class,
             ByName::class
         ])->thenReturn();
         

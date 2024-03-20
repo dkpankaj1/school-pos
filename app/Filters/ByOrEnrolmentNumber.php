@@ -5,7 +5,7 @@ use App\Enums\DatabaseEnum\StudentTable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-class ByEnrolmentNumber {
+class ByOrEnrolmentNumber {
     protected $request;
     public function __construct(Request $request){
         $this->request = $request;

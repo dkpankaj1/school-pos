@@ -6,6 +6,8 @@ import AddIcon from "../../../assets/img/icons/plus.svg";
 import DeleteBtn from "../Component/DeleteBtn";
 import EditBtn from "../Component/EditBtn";
 import StudentIcon from "../../../assets/img/icons/student.svg";
+import Pagination from "../Component/Pagination";
+import BasicFilter from "../Component/BasicFilter";
 
 function List({ students }) {
     const { request } = usePage().props;
@@ -37,31 +39,7 @@ function List({ students }) {
 
             <div className="card">
                 <div className="card-body">
-                    <div className="row">
-                        <div className="col-12 col-lg-4 col-md-4 ms-auto">
-                            <div className="form-group d-flex gap-3">
-                                <input
-                                    type="text"
-                                    placeholder="Search..."
-                                    value={data.search}
-                                    onChange={(e) =>
-                                        setData("search", e.target.value)
-                                    }
-                                />
-
-                                <button
-                                    type="button"
-                                    onClick={handleSearch}
-                                    className={`btn btn-primary ${
-                                        !processing && "px-4"
-                                    }`}
-                                    disabled={processing}
-                                >
-                                    {processing ? "Loading." : "Filter"}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                   <BasicFilter routeName={'student.index'}/>
 
                     <div className="table-responsive mb-3">
                         <table className="table">
@@ -113,29 +91,7 @@ function List({ students }) {
                             </tbody>
                         </table>
                     </div>
-                    <nav aria-label="Page navigation">
-                        <ul className="pagination">
-                            {students.links.map((item, index) => {
-                                return (
-                                    <li
-                                        key={index}
-                                        className={`page-item ${
-                                            item.active && "active"
-                                        }`}
-                                    >
-                                        <Link
-                                            className="page-link"
-                                            href={item.url}
-                                        >
-                                            {item.label
-                                                .replace(/&laquo;/g, "«")
-                                                .replace(/&raquo;/g, "»")}
-                                        </Link>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </nav>
+                    <Pagination links={students.links} />
                 </div>
             </div>
         </AppLayout>

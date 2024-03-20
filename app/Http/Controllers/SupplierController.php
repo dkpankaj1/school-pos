@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DatabaseEnum\SupplierTable;
+use App\Filters\ByEmail;
+use App\Filters\ByName;
+use App\Filters\ByOrEmail;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Pipeline;
 use Inertia\Inertia;
 
 class SupplierController extends Controller
@@ -14,7 +18,17 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Supplier/List', ['supplier' => Supplier::where(SupplierTable::FINANCE_YEAR, $this->getFinanceYear())->latest()->get()]);
+
+        $supplierQuery = Supplier::query()->where(SupplierTable::FINANCE_YEAR, $this->getFinanceYear());
+
+        $suppliers = Pipeline::send($supplierQuery)
+        ->through([
+            ByOrEmail::class,
+            ByName::class,
+        ])
+        ->thenReturn()->latest()->paginate(10)->withQueryString();
+
+        return Inertia::render('Supplier/List', ['supplier' =>$suppliers]);
     }
 
     /**
