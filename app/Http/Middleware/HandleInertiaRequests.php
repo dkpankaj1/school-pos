@@ -40,6 +40,7 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
 
             'setting' => Settings::with(['finance_year'])->first(),
+
             
             // Lazily...
             'auth.user' => fn() => $request->user()
@@ -50,6 +51,10 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn() => $request->session()->get('success'),
                 'danger' => fn() => $request->session()->get('danger'),
             ],
+
+            'request' => function() use ($request) {
+                return ['url' => $request->url(),'query' => $request->query()];
+            }
         ]);
     }
 }

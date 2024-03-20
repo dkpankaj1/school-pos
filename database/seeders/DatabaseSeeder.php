@@ -6,12 +6,15 @@ namespace Database\Seeders;
 use App\Enums\DatabaseEnum\StudentClassTable;
 use App\Enums\DatabaseEnum\UnitTable;
 use App\Enums\ImageEnum;
+use App\Models\Categories;
 use App\Models\FinanceYears;
+use App\Models\Product;
 use App\Models\Settings;
 use App\Models\Student;
 use App\Models\StudentClass;
 use App\Models\Unit;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -38,20 +41,20 @@ class DatabaseSeeder extends Seeder
 
         FinanceYears::create([
             FinanceYearTable::NAME => "2024-2025",
-            FinanceYearTable::FROM_DATE => "01-04-2024",
-            FinanceYearTable::TO_DATE => "31-03-2025",
+            FinanceYearTable::FROM_DATE =>Carbon::create(2024,4,1) ,
+            FinanceYearTable::TO_DATE =>Carbon::create(2025,3,31) ,
         ]);
 
         FinanceYears::create([
             FinanceYearTable::NAME => "2025-2026",
-            FinanceYearTable::FROM_DATE => "01-04-2025",
-            FinanceYearTable::TO_DATE => "31-03-2026",
+            FinanceYearTable::FROM_DATE => Carbon::create(2025,4,1),
+            FinanceYearTable::TO_DATE =>Carbon::create(2026,3,31),
         ]);
 
         Unit::create([
-            UnitTable::NAME => "Pices",
+            UnitTable::NAME => "Pice",
             UnitTable::SHORTNAME => "PC",
-            UnitTable::DESCRIPTION => "Pices",
+            UnitTable::DESCRIPTION => "Pice",
             UnitTable::FINANCE_YEAR => '1'
         ]);
 
@@ -88,5 +91,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Student::factory(50)->create();
+
+        Categories::factory(10)->create();
+        Product::factory(100)->create();
     }
 }

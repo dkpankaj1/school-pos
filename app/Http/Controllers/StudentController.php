@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Enums\DatabaseEnum\StudentClassTable;
 use App\Enums\DatabaseEnum\StudentTable;
+use App\Filters\ByEnrolmentNumber;
+use App\Filters\ByName;
 use App\Models\Student;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -17,8 +20,16 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
+        $studentQuery = Student::query()->with('classes')->where(StudentTable::FINANCE_YEAR,$this->getFinanceYear());
+
+        $students = Pipeline::send($studentQuery)->through([
+            ByEnrolmentNumber::class,
+            ByName::class
+        ])->thenReturn();
+        
+
         return Inertia::render("Student/List",[
-            "students" => Student::with('classes')->where(StudentTable::FINANCE_YEAR,$this->getFinanceYear())->latest()->paginate(10)
+            "students" => $students->latest()->paginate(10)->withQueryString(),
         ]);
     }
 
@@ -113,7 +124,7 @@ class StudentController extends Controller
     {
         try {
             $student->delete();
-            return redirect()->route('student.index')->with('success', 'Delete Success');
+            return redirect()->back()->with('success', 'Delete Success');
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

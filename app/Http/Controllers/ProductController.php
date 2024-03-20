@@ -6,22 +6,33 @@ use App\Enums\DatabaseEnum\CategoriesTable;
 use App\Enums\DatabaseEnum\ProductTable;
 use App\Enums\DatabaseEnum\UnitTable;
 use App\Enums\ImageEnum;
+use App\Filters\ByCode;
+use App\Filters\ByName;
 use App\Models\Categories;
 use App\Models\Product;
 use App\Models\Unit;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category','unit'])->where(ProductTable::FINANCE_YEAR, $this->getFinanceYear())->latest()->paginate(10);
+
+        $productQuery = Product::query()->with('category', 'unit')->where(ProductTable::FINANCE_YEAR, $this->getFinanceYear());
+
+        $products = Pipeline::send($productQuery)->through([
+            ByCode::class,
+            ByName::class,
+        ])->thenReturn()->paginate(5)->withQueryString();
+
         return Inertia::render('Product/List', ['products' => $products]);
     }
 
@@ -47,8 +58,8 @@ class ProductController extends Controller
             'mrp' => ["required", "numeric"],
             'cost' => ["required", "numeric"],
             'image' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
-            'category' => ["required", Rule::exists(Categories::class,'id')],
-            'unit' => ["required", Rule::exists(Unit::class,'id')],
+            'category' => ["required", Rule::exists(Categories::class, 'id')],
+            'unit' => ["required", Rule::exists(Unit::class, 'id')],
         ]);
 
         try {
@@ -65,7 +76,7 @@ class ProductController extends Controller
                 ProductTable::FINANCE_YEAR => $this->getFinanceYear(),
             ];
 
-            if($request->hasFile('image')){
+            if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $data[ProductTable::IMAGE] = $this->imageManager->loadFile($image->getRealPath())->width(200)->height(200)->base64();
             }
@@ -108,8 +119,8 @@ class ProductController extends Controller
             'mrp' => ["required", "numeric"],
             'cost' => ["required", "numeric"],
             'image' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
-            'category' => ["required", Rule::exists(Categories::class,'id')],
-            'unit' => ["required", Rule::exists(Unit::class,'id')],
+            'category' => ["required", Rule::exists(Categories::class, 'id')],
+            'unit' => ["required", Rule::exists(Unit::class, 'id')],
         ]);
 
         try {
@@ -124,7 +135,7 @@ class ProductController extends Controller
                 ProductTable::UNIT => $request->unit ?? $product->unit,
             ];
 
-            if($request->hasFile('image')){
+            if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $data[ProductTable::IMAGE] = $this->imageManager->loadFile($image->getRealPath())->width(200)->height(200)->base64();
             }
@@ -144,7 +155,7 @@ class ProductController extends Controller
     {
         try {
             $product->delete();
-            return redirect()->route('products.index')->with('success', 'Delete success');
+            return redirect()->back()->with('success', 'Delete success');
         } catch (\Exception $e) {
             return redirect()->route('products.index')->with('danger', $e->getMessage());
         }

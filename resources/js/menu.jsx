@@ -15,15 +15,15 @@ export const menu = [
         url: route('dashboard'),
         icon: DashboardIcon,
     },
-    {
-        label: "Sales",
-        url: "",
-        icon: SaleIcon,
-        sub: [
-            { label: "List", url: "#" },
-            { label: "New", url: "#" },
-        ],
-    },
+    // {
+    //     label: "Sales",
+    //     url: "",
+    //     icon: SaleIcon,
+    //     sub: [
+    //         { label: "List", url: "#" },
+    //         { label: "New", url: "#" },
+    //     ],
+    // },
     {
         label: "Purchase",
         url: "",
@@ -63,27 +63,27 @@ export const menu = [
             { label: "Unit", url: route('units.index') },
         ],
     },
-    {
-        label: "Return",
-        url: "",
-        icon: ReturnIcon,
-        sub: [
-            { label: "Sale Return List", url: "#" },
-            { label: "Add Sale Return", url: "#" },
-            { label: "Purchase Return List", url: "#" },
-            { label: "Add Purchase Return", url: "#" },
-        ],
-    },
-    {
-        label: "Report",
-        url: "",
-        icon: ReportIcon,
-        sub: [
-            { label: "List", url: "#" },
-            { label: "Add", url: "#" },
-            { label: "Categories", url: "#" },
-        ],
-    },
+    // {
+    //     label: "Return",
+    //     url: "",
+    //     icon: ReturnIcon,
+    //     sub: [
+    //         { label: "Sale Return List", url: "#" },
+    //         { label: "Add Sale Return", url: "#" },
+    //         { label: "Purchase Return List", url: "#" },
+    //         { label: "Add Purchase Return", url: "#" },
+    //     ],
+    // },
+    // {
+    //     label: "Report",
+    //     url: "",
+    //     icon: ReportIcon,
+    //     sub: [
+    //         { label: "List", url: "#" },
+    //         { label: "Add", url: "#" },
+    //         { label: "Categories", url: "#" },
+    //     ],
+    // },
     {
         label: "Settings",
         url: route('setting.index'),
