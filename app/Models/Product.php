@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\DatabaseEnum\ProductTable;
+use App\Enums\DatabaseEnum\PurchaseItemTable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,9 +26,13 @@ class Product extends Model
     {
         return $this->belongsTo(Categories::class);
     }
-
     public function unit()
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    public function purchaseItems()
+    {
+        return $this->hasMany(PurchaseItem::class,PurchaseItemTable::PRODUCT_ID,'id');
     }
 }

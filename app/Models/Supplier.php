@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DatabaseEnum\PurchaseTable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\DatabaseEnum\SupplierTable;
@@ -20,4 +21,9 @@ class Supplier extends Model
         SupplierTable::POSTAL_CODE,
         SupplierTable::FINANCE_YEAR,
     ];
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class,PurchaseTable::SUPPLIER_ID,'id');
+    }
 }

@@ -29,7 +29,7 @@ export const menu = [
         url: "",
         icon: PurchaseIcon,
         sub: [
-            { label: "List", url: "#" },
+            { label: "List", url: route('purchases.index') },
             { label: "New", url: "#" },
         ],
     },

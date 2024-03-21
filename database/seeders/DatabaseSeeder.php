@@ -9,6 +9,8 @@ use App\Enums\ImageEnum;
 use App\Models\Categories;
 use App\Models\FinanceYears;
 use App\Models\Product;
+use App\Models\Purchase;
+use App\Models\PurchaseItem;
 use App\Models\Settings;
 use App\Models\Student;
 use App\Models\StudentClass;
@@ -96,6 +98,10 @@ class DatabaseSeeder extends Seeder
         Categories::factory(10)->create();
         Product::factory(100)->create();
 
-        Supplier::factory(20)->create();
+        Supplier::factory(5)->has(
+            Purchase::factory()->has(
+                PurchaseItem::factory()->count(5)
+            )->count(5)
+        )->create();
     }
 }
