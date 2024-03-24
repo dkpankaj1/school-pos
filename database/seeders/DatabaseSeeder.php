@@ -42,16 +42,17 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        FinanceYears::create([
-            FinanceYearTable::NAME => "2024-2025",
-            FinanceYearTable::FROM_DATE =>Carbon::create(2024,4,1) ,
-            FinanceYearTable::TO_DATE =>Carbon::create(2025,3,31) ,
-        ]);
-
-        FinanceYears::create([
-            FinanceYearTable::NAME => "2025-2026",
-            FinanceYearTable::FROM_DATE => Carbon::create(2025,4,1),
-            FinanceYearTable::TO_DATE =>Carbon::create(2026,3,31),
+        FinanceYears::insert([
+            [
+                FinanceYearTable::NAME => "2024-2025",
+                FinanceYearTable::FROM_DATE => Carbon::create(2024, 4, 1),
+                FinanceYearTable::TO_DATE => Carbon::create(2025, 3, 31),
+            ],
+            [
+                FinanceYearTable::NAME => "2025-2026",
+                FinanceYearTable::FROM_DATE => Carbon::create(2025, 4, 1),
+                FinanceYearTable::TO_DATE => Carbon::create(2026, 3, 31),
+            ]
         ]);
 
         Unit::create([
@@ -77,31 +78,26 @@ class DatabaseSeeder extends Seeder
         ]);
 
         StudentClass::insert([
-            [StudentClassTable::NAME => "LKG",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "UKG",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 1st",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 2nd",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 3rd",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 4th",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 5th",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 6th",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 7th",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 8th",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 9th",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 10th",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 11th",StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 12th",StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "NURSERY", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "LKG", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "UKG", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 1st", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 2nd", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 3rd", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 4th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 5th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 6th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 7th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 8th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 9th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 10th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 11th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "CLASS 12th", StudentClassTable::FINANCE_YEAR => 1],
         ]);
 
-        Student::factory(50)->create();
-
         Categories::factory(10)->create();
-        Product::factory(100)->create();
-
-        Supplier::factory(5)->has(
-            Purchase::factory()->has(
-                PurchaseItem::factory()->count(5)
-            )->count(5)
-        )->create();
+        Product::factory(10)->create();
+        Student::factory(50)->create();
+        Supplier::factory(5)->create();
     }
 }

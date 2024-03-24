@@ -19,7 +19,7 @@ function Create({ suppliers, products }) {
         other_charges: 0,
         discount: 0,
         grand_total: 0,
-        notes : ""
+        notes: "",
     });
 
     // Function to handle adding product to cart
@@ -423,7 +423,13 @@ function Create({ suppliers, products }) {
                         <div className="col-lg-12">
                             <div className="form-group">
                                 <label>Description</label>
-                                <textarea className="form-control" value={data.notes} onChange={e => setData('notes',e.target.value)}></textarea>
+                                <textarea
+                                    className="form-control"
+                                    value={data.notes}
+                                    onChange={(e) =>
+                                        setData("notes", e.target.value)
+                                    }
+                                ></textarea>
                             </div>
                         </div>
                         <div className="col-lg-12">
@@ -431,15 +437,10 @@ function Create({ suppliers, products }) {
                                 href="#"
                                 className="btn btn-submit me-2"
                                 onClick={handleSubmit}
+                                disabled={processing}
                             >
-                                Submit
+                                {processing ? "Loading..." : "Save"}
                             </button>
-                            <a
-                                href="purchaselist.html"
-                                className="btn btn-cancel"
-                            >
-                                Cancel
-                            </a>
                         </div>
                     </div>
                 </div>

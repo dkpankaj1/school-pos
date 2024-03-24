@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Head, useForm, usePage } from "@inertiajs/react";
 import AppLayouts from "../Layouts/AppLayouts";
 import PageHeader from "../Component/PageHeader";
@@ -437,15 +437,10 @@ function Edit({ purchase, suppliers, products }) {
                                 href="#"
                                 className="btn btn-submit me-2"
                                 onClick={handleSubmit}
+                                disabled={processing}
                             >
-                                Submit
+                                {processing ? "Loading..." : "Submit"}
                             </button>
-                            <a
-                                href="purchaselist.html"
-                                className="btn btn-cancel"
-                            >
-                                Cancel
-                            </a>
                         </div>
                     </div>
                 </div>

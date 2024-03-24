@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\DatabaseEnum\ProductTable;
 use App\Enums\DatabaseEnum\PurchaseItemTable;
 use App\Enums\DatabaseEnum\PurchaseTable;
+use App\Enums\DatabaseEnum\StockTable;
 use App\Enums\DatabaseEnum\SupplierTable;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentStatusEnum;
@@ -18,6 +19,7 @@ use App\Http\Resources\PurchaseResource;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchaseItem;
+use App\Models\Stock;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -109,7 +111,7 @@ class PurchaseController extends Controller
 
                 foreach ($request->cart_items as $item) {
                     $data[PurchaseItemTable::PURCHASE_ID] = $purchase->id;
-                    $data[PurchaseItemTable::PRODUCT_ID] = intval($item['id']);
+                    $data[PurchaseItemTable::PRODUCT_ID] = $item['id'];
                     $data[PurchaseItemTable::QUANTITY] = intval($item['quantity']);
                     $data[PurchaseItemTable::MRP] = doubleval($item['mrp']);
                     $data[PurchaseItemTable::COST] = doubleval($item['cost']);
@@ -117,6 +119,21 @@ class PurchaseController extends Controller
                     $data[PurchaseItemTable::FINANCE_YEAR] = $this->getFinanceYear();
                     $data['created_at'] = Carbon::now();
                     $cartItem[] = $data;
+
+                    if ($purchase->order_status === OrderStatusEnum::RECEIVED) {
+                        $stockResult = Stock::firstOrCreate([
+                            StockTable::PRODUCT_ID => $data[PurchaseItemTable::PRODUCT_ID],
+                            StockTable::FINANCE_YEAR => $this->getFinanceYear()
+                        ], [
+                            StockTable::PRODUCT_ID => $data[PurchaseItemTable::PRODUCT_ID],
+                            StockTable::QUANTITY => 0,
+                            StockTable::FINANCE_YEAR => $data[PurchaseItemTable::FINANCE_YEAR]
+                        ]);
+
+                        $stockResult->quantity += $data[PurchaseItemTable::QUANTITY];
+                        $stockResult->save();
+                    }
+
                 }
                 PurchaseItem::insert($cartItem);
             });
@@ -177,6 +194,18 @@ class PurchaseController extends Controller
 
                 $grand_total = doubleval($request->grand_total);
 
+                if ($purchase->order_status === OrderStatusEnum::RECEIVED) {
+
+                    foreach ($purchase->purchaseItems as $purchaseItem) {
+                        $stockResult = Stock::where([
+                            StockTable::PRODUCT_ID => $purchaseItem->product_id,
+                            StockTable::FINANCE_YEAR => $purchase->finance_year_id
+                        ])->first();
+                        $stockResult->quantity -= $purchaseItem->quantity;
+                        $stockResult->save();
+                    }
+                }
+
                 $purchase->update([
                     PurchaseTable::DATE => $request->purchase_date,
                     PurchaseTable::REFERENCE_NUMBER => $request->reference,
@@ -196,7 +225,7 @@ class PurchaseController extends Controller
 
                 foreach ($request->cart_items as $item) {
                     $data[PurchaseItemTable::PURCHASE_ID] = $purchase->id;
-                    $data[PurchaseItemTable::PRODUCT_ID] = intval($item['id']);
+                    $data[PurchaseItemTable::PRODUCT_ID] = $item['id'];
                     $data[PurchaseItemTable::QUANTITY] = intval($item['quantity']);
                     $data[PurchaseItemTable::MRP] = doubleval($item['mrp']);
                     $data[PurchaseItemTable::COST] = doubleval($item['cost']);
@@ -204,6 +233,20 @@ class PurchaseController extends Controller
                     $data[PurchaseItemTable::FINANCE_YEAR] = $this->getFinanceYear();
                     $data['created_at'] = Carbon::now();
                     $cartItem[] = $data;
+
+                    if ($purchase->order_status === OrderStatusEnum::RECEIVED) {
+                        $stockResult = Stock::firstOrCreate([
+                            StockTable::PRODUCT_ID => $data[PurchaseItemTable::PRODUCT_ID],
+                            StockTable::FINANCE_YEAR => $this->getFinanceYear()
+                        ], [
+                            StockTable::PRODUCT_ID => $data[PurchaseItemTable::PRODUCT_ID],
+                            StockTable::QUANTITY => 0,
+                            StockTable::FINANCE_YEAR => $data[PurchaseItemTable::FINANCE_YEAR]
+                        ]);
+
+                        $stockResult->quantity += $data[PurchaseItemTable::QUANTITY];
+                        $stockResult->save();
+                    }
                 }
                 PurchaseItem::insert($cartItem);
             });
@@ -220,6 +263,19 @@ class PurchaseController extends Controller
     public function destroy(Purchase $purchase)
     {
         try {
+
+            if ($purchase->order_status === OrderStatusEnum::RECEIVED) {
+
+                foreach ($purchase->purchaseItems as $purchaseItem) {
+                    $stockResult = Stock::where([
+                        StockTable::PRODUCT_ID => $purchaseItem->product_id,
+                        StockTable::FINANCE_YEAR => $purchase->finance_year_id
+                    ])->first();
+                    $stockResult->quantity -= $purchaseItem->quantity;
+                    $stockResult->save();
+                }
+            }
+
             $purchase->purchaseItems()->delete();
             $purchase->delete();
             return redirect()->route('purchases.index')->with('success', 'Delete Success');

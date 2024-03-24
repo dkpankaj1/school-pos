@@ -11,11 +11,10 @@ import PaymentStatus from "../Component/PaymentStatus";
 import OrderStatus from "../Component/OrderStatus";
 
 function List({ purchases, suppliers }) {
-    
     const { request } = usePage().props;
 
     const { data, setData, get, processing } = useForm({
-        purchase_date : request.query?.purchase_date || "",
+        purchase_date: request.query?.purchase_date || "",
         reference: request.query?.reference || "",
         order_status: request.query?.order_status || "",
         payment_status: request.query?.payment_status || "",
@@ -59,7 +58,9 @@ function List({ purchases, suppliers }) {
                                     }}
                                     placeholder="Choose Date"
                                     value={data.purchase_date}
-                                    onChange={e => setData('purchase_date',e.target.value)}
+                                    onChange={(e) =>
+                                        setData("purchase_date", e.target.value)
+                                    }
                                 />
                             </div>
                         </div>
@@ -75,7 +76,9 @@ function List({ purchases, suppliers }) {
                                     }}
                                     placeholder="Enter Reference"
                                     value={data.reference}
-                                    onChange={e => setData('reference',e.target.value)}
+                                    onChange={(e) =>
+                                        setData("reference", e.target.value)
+                                    }
                                 />
                             </div>
                         </div>
@@ -141,9 +144,11 @@ function List({ purchases, suppliers }) {
                                         color: "#adb5bd",
                                     }}
                                     defaultValue={data.order_status}
-                                    onChange={e => setData('order_status',e.target.value)}
+                                    onChange={(e) =>
+                                        setData("order_status", e.target.value)
+                                    }
                                 >
-                                     <option value="">Choose Status</option>
+                                    <option value="">Choose Status</option>
                                     <option value="pending">Pending</option>
                                     <option value="order">Order</option>
                                     <option value="received">Received</option>
@@ -152,12 +157,19 @@ function List({ purchases, suppliers }) {
                         </div>
                         <div className="col-lg-1 col-sm-6 col-12">
                             <div className="form-group">
-
-                                <button type="button" className="btn btn-primary" disabled={processing} style={{width:"7rem"}}  onClick={filter}>
-                                    {processing && <span
-                                        className="spinner-border spinner-border-sm me-2"
-                                        role="status"
-                                    ></span>}
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    disabled={processing}
+                                    style={{ width: "7rem" }}
+                                    onClick={filter}
+                                >
+                                    {processing && (
+                                        <span
+                                            className="spinner-border spinner-border-sm me-2"
+                                            role="status"
+                                        ></span>
+                                    )}
                                     Filter
                                 </button>
                             </div>
@@ -171,10 +183,10 @@ function List({ purchases, suppliers }) {
                                     <th>Date</th>
                                     <th>Reference No.</th>
                                     <th>Supplier</th>
+                                    <th>Order Status</th>
                                     <th>Total Amount</th>
                                     <th>Paid Amount</th>
                                     <th>Payment Status</th>
-                                    <th>Order Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -191,19 +203,19 @@ function List({ purchases, suppliers }) {
                                             <td>{purchase.date}</td>
                                             <td>{purchase.reference_number}</td>
                                             <td>{purchase.supplier}</td>
+                                            <td>
+                                                <OrderStatus
+                                                    status={
+                                                        purchase.order_status
+                                                    }
+                                                />
+                                            </td>
                                             <td>{purchase.total_amount}</td>
                                             <td>{purchase.paid_amount}</td>
                                             <td>
                                                 <PaymentStatus
                                                     status={
                                                         purchase.payment_status
-                                                    }
-                                                />
-                                            </td>
-                                            <td>
-                                                <OrderStatus
-                                                    status={
-                                                        purchase.order_status
                                                     }
                                                 />
                                             </td>
