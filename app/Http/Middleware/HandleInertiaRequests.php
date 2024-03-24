@@ -40,7 +40,7 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
 
             'setting' => Settings::with(['finance_year'])->first(),
-
+            // 'csrf_token' => $request->session()->token(),
             
             // Lazily...
             'auth.user' => fn() => $request->user()

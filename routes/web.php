@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SearchProductController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentClassController;
 use App\Http\Controllers\StudentController;

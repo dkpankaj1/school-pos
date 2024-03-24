@@ -22,6 +22,7 @@ return new class extends Migration
             $table->double(PurchaseItemTable::MRP);
             $table->double(PurchaseItemTable::COST);
             $table->unsignedBigInteger(PurchaseItemTable::QUANTITY);
+            $table->tinyInteger(PurchaseItemTable::STATUS)->default(0);
             $table->unsignedBigInteger(PurchaseItemTable::FINANCE_YEAR);
             $table->timestamps();
 

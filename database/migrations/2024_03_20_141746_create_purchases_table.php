@@ -21,7 +21,6 @@ return new class extends Migration
             $table->unsignedBigInteger(PurchaseTable::SUPPLIER_ID);
             $table->double(PurchaseTable::OTHER_AMOUNT);
             $table->double(PurchaseTable::DISCOUNT);
-            $table->string(PurchaseTable::DISCOUNT_TYPE);
             $table->double(PurchaseTable::TOTAL_AMOUNT);
             $table->double(PurchaseTable::PAID_AMOUNT);
             $table->string(PurchaseTable::ORDER_STATUS);

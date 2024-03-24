@@ -15,6 +15,7 @@ class PurchaseItem extends Model
         PurchaseItemTable::MRP,
         PurchaseItemTable::COST,
         PurchaseItemTable::QUANTITY,
+        PurchaseItemTable::STATUS,
         PurchaseItemTable::FINANCE_YEAR,
     ];
     public function product()

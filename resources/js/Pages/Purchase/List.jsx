@@ -11,6 +11,7 @@ import PaymentStatus from "../Component/PaymentStatus";
 import OrderStatus from "../Component/OrderStatus";
 
 function List({ purchases, suppliers }) {
+    
     const { request } = usePage().props;
 
     const { data, setData, get, processing } = useForm({
@@ -189,7 +190,7 @@ function List({ purchases, suppliers }) {
                                         <tr key={index}>
                                             <td>{purchase.date}</td>
                                             <td>{purchase.reference_number}</td>
-                                            <td>{purchase.supplier.name}</td>
+                                            <td>{purchase.supplier}</td>
                                             <td>{purchase.total_amount}</td>
                                             <td>{purchase.paid_amount}</td>
                                             <td>
@@ -229,7 +230,7 @@ function List({ purchases, suppliers }) {
                             </tbody>
                         </table>
                     </div>
-                    <Pagination links={purchases.links} />
+                    <Pagination links={purchases.meta.links} />
                 </div>
             </div>
         </AppLayout>

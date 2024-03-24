@@ -37,7 +37,7 @@ class CategoriesController extends Controller
             return redirect()->route('categories.index')->with('success', 'Categories Create Success');
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('danger', $e->getMessage());
         }
 
 
@@ -67,7 +67,7 @@ class CategoriesController extends Controller
             return redirect()->route('categories.index')->with('success', 'Categories Update Success');
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('danger', $e->getMessage());
         }
     }
 
@@ -77,7 +77,7 @@ class CategoriesController extends Controller
             $category->delete();
             return redirect()->route('categories.index')->with('success', 'Categories Delete Success');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('danger', $e->getMessage());
         }
     }
 }

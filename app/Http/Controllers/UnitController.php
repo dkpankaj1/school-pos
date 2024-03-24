@@ -83,7 +83,7 @@ class UnitController extends Controller
             $unit->delete();
             return redirect()->route('units.index')->with('success', 'delete success');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('danger', $e->getMessage());
         }
     }
 }

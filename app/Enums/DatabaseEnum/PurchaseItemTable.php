@@ -9,6 +9,7 @@ enum PurchaseItemTable
     const MRP = "mrp";
     const COST = "cost";
     const QUANTITY = "quantity";
+    const STATUS = "status";
     const FINANCE_YEAR = "finance_year_id";
 
 }

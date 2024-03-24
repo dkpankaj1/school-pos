@@ -11,7 +11,6 @@ enum PurchaseTable
     const SUPPLIER_ID = "supplier_id";
     const OTHER_AMOUNT = "other_amount";
     const DISCOUNT = "discount";
-    const DISCOUNT_TYPE = "discount_type";
     const TOTAL_AMOUNT = "total_amount";
     const PAID_AMOUNT = "paid_amount";
     CONST ORDER_STATUS = "order_status";

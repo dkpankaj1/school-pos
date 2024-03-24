@@ -30,7 +30,7 @@ export const menu = [
         icon: PurchaseIcon,
         sub: [
             { label: "List", url: route('purchases.index') },
-            { label: "New", url: "#" },
+            { label: "New", url: route('purchases.create') },
         ],
     },
     {

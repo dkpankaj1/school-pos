@@ -1,278 +1,445 @@
-import React,{useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import AppLayouts from "../Layouts/AppLayouts";
-import { Head, useForm } from "@inertiajs/react";
 import PageHeader from "../Component/PageHeader";
+import ScannerIcon from "../../../assets/img/icons/scanners.svg";
+import DeleteIcon from "../../../assets/img/icons/delete.svg";
 
-function Create({ units, categories }) {
+function Create({ suppliers, products }) {
+    const { setting } = usePage().props;
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResult, setSearchResult] = useState([]);
 
-    const [imagePreview, setImagePreview] = useState("https://placehold.co/200x200")
-
-    const { data, setData, post, processing, progress,errors } = useForm({
-        code: "",
-        name: "",
-        description: "",
-        mrp: "",
-        cost: "",
-        image: undefined,
-        category: "",
-        unit: "",
+    const { data, setData, post, processing, errors, transform } = useForm({
+        supplier: "",
+        purchase_date: " ",
+        reference: "",
+        status: "",
+        cart_items: [],
+        other_charges: 0,
+        discount: 0,
+        grand_total: 0,
+        notes : ""
     });
 
+    // Function to handle adding product to cart
+    const handleAddToCart = (item) => {
+        const newItem = {
+            id: item.id,
+            name: item.name,
+            code: item.code,
+            quantity: 1,
+            mrp: item.mrp,
+            cost: item.cost,
+        };
 
-    const handleSubmit = () => {
-        post(route("products.store"));
+        const found = data.cart_items.some(
+            (cartItem) => cartItem.id == item.id
+        );
+
+        !found && setData("cart_items", [...data.cart_items, newItem]);
+
+        setSearchQuery("");
     };
 
-    const handleImageInput = (e) => {
-        setData('image', e.target.files[0])
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImagePreview(reader.result);
-        };
-        reader.readAsDataURL(e.target.files[0]);
-    }
+    // Function to handle removing product from cart
+    const handleRemoveFromCart = (index) => {
+        const updatedCartItems = [...data.cart_items];
+        updatedCartItems.splice(index, 1);
+        setData("cart_items", updatedCartItems);
+    };
+
+    // Function to handle modifying cart item
+    const handleModifyCartItem = (index, field, value) => {
+        if (value != "") {
+            const updatedCartItems = [...data.cart_items];
+            updatedCartItems[index][field] = parseFloat(value);
+            setData("cart_items", updatedCartItems);
+        }
+    };
+
+    const handleSubmit = () => {
+        post(route("purchases.store"), data);
+    };
+
+    useEffect(() => {
+        if (searchQuery === "") {
+            setSearchResult([]);
+        } else {
+            const timeOutId = setTimeout(() => {
+                const filteredProduct = products.filter((product) => {
+                    return (
+                        product.name
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()) ||
+                        product.code
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase())
+                    );
+                });
+                setSearchResult(filteredProduct);
+            }, 500);
+            return () => clearTimeout(timeOutId);
+        }
+    }, [searchQuery]);
+
+    useEffect(() => {
+        let result = 0;
+        data.cart_items.forEach((item) => {
+            result +=
+                (parseFloat(item.cost) || 0) * (parseFloat(item.quantity) || 1); // Add item cost to result or 0 if NaN
+        });
+        result += parseFloat(data.other_charges) || 0; // Add otherCharges to result or 0 if NaN
+        result -= parseFloat(data.discount) || 0; // Subtract discount from result or 0 if NaN
+        setData("grand_total", result);
+    }, [data.cart_items, data.other_charges, data.discount]);
 
     return (
         <AppLayouts>
             <Head>
-                <title>Product Create - Dashboard</title>
+                <title>New Purchase - Dashboard</title>
             </Head>
 
-            <PageHeader title={"Add Product"} subtitle={"Create new product"} />
-
+            <PageHeader
+                title={"New Purchase"}
+                subtitle={"Create new purchase"}
+            />
             <div className="card">
                 <div className="card-body">
                     <div className="row">
-                        <div className="col-lg-6 col-12">
-                            <div className="row">
-                                <div className="col-lg-6 col-sm-6 col-12">
-                                    <div className="form-group">
-                                        <label>Category Code</label>
-                                        <div className="input-group">
-                                            <span className="input-group-text">
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="16"
-                                                    height="16"
-                                                    fill="currentColor"
-                                                    className="bi bi-upc-scan"
-                                                    viewBox="0 0 16 16"
-                                                >
-                                                    <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z" />
-                                                </svg>
-                                            </span>
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                placeholder="Product code"
-                                                value={data.code}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        "code",
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
-                                        </div>
-                                        {errors.code && (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.code}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-6 col-sm-6 col-12">
-                                    <div className="form-group">
-                                        <label>Product Name</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter Product Name"
-                                            value={data.name}
-                                            onChange={(e) =>
-                                                setData("name", e.target.value)
-                                            }
-                                        />
-                                        {errors.name && (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.name}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-6 col-sm-6 col-12">
-                                    <div className="form-group">
-                                        <label>Category</label>
-                                        <select
-                                            className="form-control form-select"
-                                            onChange={(e) =>
-                                                
-                                                setData(
-                                                    "category",
-                                                    e.target.value
-                                                )
-                                            }
-                                        >
-                                            <option value="">
-                                                -- select --
+                        <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="form-group">
+                                <label>Supplier Name</label>
+                                <select
+                                    className="form-control custom-form-control"
+                                    defaultValue={data.supplier}
+                                    onChange={(e) =>
+                                        setData("supplier", e.target.value)
+                                    }
+                                >
+                                    <option value="">Select</option>
+                                    {suppliers.map((item, index) => {
+                                        return (
+                                            <option key={index} value={item.id}>
+                                                {item.name}
                                             </option>
-                                            {categories.map((item) => {
-                                                return (
-                                                    <option key={item.id} value={item.id}>
-                                                        {item.name}
-                                                    </option>
-                                                );
-                                            })}
-                                        </select>
-                                        {errors.category && (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.category}
-                                            </div>
-                                        )}
+                                        );
+                                    })}
+                                </select>
+                                {errors.supplier && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.supplier}
                                     </div>
-                                </div>
-
-                                <div className="col-lg-6 col-sm-6 col-12">
-                                    <div className="form-group">
-                                        <label>Unit</label>
-                                        <select
-                                            className="form-control form-select"
-                                            onChange={(e) =>
-                                                setData("unit", e.target.value)
-                                            }
-                                        >
-                                            <option value="">
-                                                -- select --
-                                            </option>
-                                            {units.map((item) => {
-                                                return (
-                                                    <option key={item.id} value={item.id}>
-                                                        {item.short_name}
-                                                    </option>
-                                                );
-                                            })}
-                                        </select>
-                                        {errors.unit && (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.unit}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-6 col-sm-6 col-12">
-                                    <div className="form-group">
-                                        <label>Purchase Price</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter Product Name"
-                                            value={data.cost}
-                                            onChange={(e) =>
-                                                setData("cost", e.target.value)
-                                            }
-                                        />
-                                        {errors.cost && (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.cost}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-6 col-sm-6 col-12">
-                                    <div className="form-group">
-                                        <label>Sale Price</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter Product Name"
-                                            value={data.mrp}
-                                            onChange={(e) =>
-                                                setData("mrp", e.target.value)
-                                            }
-                                        />
-                                        {errors.mrp && (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.mrp}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="w-100"></div>
-
-                                <div className="col-12">
-                                    <div className="form-group">
-                                        <label>Description</label>
-                                        <textarea
-                                            className="form-control"
-                                            placeholder="Enter Description"
-                                            value={data.description}
-                                            onChange={(e) =>
-                                                setData(
-                                                    "description",
-                                                    e.target.value
-                                                )
-                                            }
-                                        ></textarea>
-                                        {errors.description && (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.description}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                                )}
                             </div>
                         </div>
-                        <div className="col-lg-6 col-12">
-                            <div className="col-lg-6 col-12">
-                                <div className="form-group">
-                                    <label>Product Image</label>
-                                    <img
-                                        src={imagePreview}
-                                        alt=""
-                                    />
 
-                                    {progress && (
-                                        <progress
-                                            value={progress.percentage}
-                                            max="100"
-                                            className="progress w-100 my-2 "
-                                        >
-                                            {progress.percentage}%
-                                        </progress>
-                                    )}
-
+                        <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="form-group">
+                                <label>Purchase Date </label>
+                                <div className="input-groupicon">
                                     <input
-                                        type="file"
-                                        className="form-control"
-                                        onChange={handleImageInput}
+                                        value={data.purchase_date}
+                                        onChange={(e) =>
+                                            setData(
+                                                "purchase_date",
+                                                e.target.value
+                                            )
+                                        }
+                                        type="date"
+                                        placeholder="DD-MM-YYYY"
+                                        className="form-control custom-form-control"
                                     />
-                                    {errors.image && (
-                                        <div className="invalid-feedback d-block">
-                                            {errors.image}
-                                        </div>
-                                    )}
                                 </div>
+                                {errors.purchase_date && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.purchase_date}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="form-group">
+                                <label>Reference No.</label>
+                                <input
+                                    value={data.reference}
+                                    onChange={(e) =>
+                                        setData("reference", e.target.value)
+                                    }
+                                    type="text"
+                                    className="form-control custom-form-control"
+                                    placeholder="Enter Reference Number"
+                                />
+                                {errors.reference && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.reference}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="form-group">
+                                <label>Order Status</label>
+                                <select
+                                    className="form-control custom-form-control"
+                                    defaultValue={data.status}
+                                    onChange={(e) =>
+                                        setData("status", e.target.value)
+                                    }
+                                >
+                                    <option value="">Select</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="order">Order</option>
+                                    <option value="received">Received</option>
+                                </select>
+                                {errors.status && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.status}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
                         <div className="col-12">
-                            <hr />
+                            <div className="form-group">
+                                <label>Search Product</label>
+
+                                <div className="input-groupicon">
+                                    <input
+                                        type="text"
+                                        placeholder="Scan/Search Product by code and select..."
+                                        value={searchQuery}
+                                        onChange={(e) =>
+                                            setSearchQuery(e.target.value)
+                                        }
+                                    />
+                                    <div className="addonset">
+                                        <img src={ScannerIcon} alt="img" />
+                                    </div>
+                                </div>
+
+                                {searchResult.length > 0 && (
+                                    <ul className="searchResultContainer">
+                                        {searchResult.map((item, index) => {
+                                            return (
+                                                <li
+                                                    key={index}
+                                                    className="searchResultItem"
+                                                    onClick={() =>
+                                                        handleAddToCart(item)
+                                                    }
+                                                >
+                                                    {item.name} | {item.code}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                )}
+
+                                {errors.cart_items && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.cart_items}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="table-responsive">
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Product Name</th>
+                                        <th>Product Code</th>
+                                        <th>QTY</th>
+                                        <th>
+                                            Purchase Price(
+                                            {setting.currency_symbol})
+                                        </th>
+                                        <th>
+                                            Sale Price({setting.currency_symbol}
+                                            )
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {data.cart_items.map((item, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <th>{index + 1}</th>
+                                                <th>{item.name}</th>
+                                                <th>{item.code}</th>
+                                                <th>
+                                                    <input
+                                                        type="number"
+                                                        style={{
+                                                            width: "5rem",
+                                                            border: "none",
+                                                            padding: ".25rem",
+                                                        }}
+                                                        value={item.quantity}
+                                                        onChange={(e) =>
+                                                            handleModifyCartItem(
+                                                                index,
+                                                                "quantity",
+                                                                parseInt(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            )
+                                                        }
+                                                    />
+                                                </th>
+                                                <th>
+                                                    {" "}
+                                                    <input
+                                                        type="number"
+                                                        style={{
+                                                            width: "5rem",
+                                                            border: "none",
+                                                            padding: ".25rem",
+                                                        }}
+                                                        value={item.cost}
+                                                        onChange={(e) =>
+                                                            handleModifyCartItem(
+                                                                index,
+                                                                "cost",
+                                                                parseFloat(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            )
+                                                        }
+                                                    />
+                                                </th>
+                                                <th>
+                                                    <input
+                                                        type="number"
+                                                        style={{
+                                                            width: "5rem",
+                                                            border: "none",
+                                                            padding: ".25rem",
+                                                        }}
+                                                        value={item.mrp}
+                                                        onChange={(e) =>
+                                                            handleModifyCartItem(
+                                                                index,
+                                                                "mrp",
+                                                                parseFloat(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            )
+                                                        }
+                                                    />
+                                                </th>
+                                                <th>
+                                                    <button
+                                                        className=" btn p-0 delete-set"
+                                                        onClick={() =>
+                                                            handleRemoveFromCart(
+                                                                index
+                                                            )
+                                                        }
+                                                    >
+                                                        <img
+                                                            src={DeleteIcon}
+                                                            alt="svg"
+                                                        />
+                                                    </button>
+                                                </th>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-lg-12 float-md-right">
+                            <div className="total-order">
+                                <ul>
+                                    <li>
+                                        <h4>
+                                            Order Charges (
+                                            {setting.currency_symbol})
+                                        </h4>
+                                        <h5>
+                                            <input
+                                                type="number"
+                                                className="float-md-right p-1"
+                                                style={{
+                                                    width: "5rem",
+                                                    border: "none",
+                                                }}
+                                                value={data.other_charges}
+                                                onChange={(e) =>
+                                                    setData(
+                                                        "other_charges",
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </h5>
+                                    </li>
+                                    <li>
+                                        <h4>
+                                            Discount ({setting.currency_symbol}){" "}
+                                        </h4>
+                                        <h5>
+                                            <input
+                                                type="number"
+                                                className="float-md-right p-1"
+                                                style={{
+                                                    width: "5rem",
+                                                    border: "none",
+                                                }}
+                                                value={data.discount}
+                                                onChange={(e) =>
+                                                    setData(
+                                                        "discount",
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </h5>
+                                    </li>
+
+                                    <li className="total">
+                                        <h4>
+                                            Grand Total (
+                                            {setting.currency_symbol})
+                                        </h4>
+                                        <h5>{data.grand_total}</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="form-group">
+                                <label>Description</label>
+                                <textarea className="form-control" value={data.notes} onChange={e => setData('notes',e.target.value)}></textarea>
+                            </div>
+                        </div>
+                        <div className="col-lg-12">
                             <button
-                                disabled={processing}
+                                href="#"
                                 className="btn btn-submit me-2"
                                 onClick={handleSubmit}
                             >
-                                {processing ? "Loading.." : "Submit"}
+                                Submit
                             </button>
-                            <button
-                                disabled={processing}
-                                type="reset"
+                            <a
+                                href="purchaselist.html"
                                 className="btn btn-cancel"
                             >
-                                Reset
-                            </button>
+                                Cancel
+                            </a>
                         </div>
                     </div>
                 </div>

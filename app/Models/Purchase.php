@@ -19,7 +19,6 @@ class Purchase extends Model
         PurchaseTable::SUPPLIER_ID,
         PurchaseTable::OTHER_AMOUNT,
         PurchaseTable::DISCOUNT,
-        PurchaseTable::DISCOUNT_TYPE,
         PurchaseTable::TOTAL_AMOUNT,
         PurchaseTable::PAID_AMOUNT,
         PurchaseTable::ORDER_STATUS,
@@ -27,12 +26,6 @@ class Purchase extends Model
         PurchaseTable::PURCHASE_NOTE,
         PurchaseTable::FINANCE_YEAR,
     ];
-
-    // protected $casts = [
-    //     PurchaseTable::DISCOUNT_TYPE => DiscountTypeEnum::class,
-    //     PurchaseTable::ORDER_STATUS => OrderStatusEnum::class,
-    //     PurchaseTable::PAYMENT_STATUS => PaymentStatusEnum::class,
-    // ];
 
     public function supplier()
     {

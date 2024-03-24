@@ -25,6 +25,7 @@ class PurchaseItemFactory extends Factory
             PurchaseItemTable::MRP => $product->mrp,
             PurchaseItemTable::COST => $product->cost,
             PurchaseItemTable::QUANTITY => $this->faker->numberBetween(1,50),
+            PurchaseItemTable::STATUS => 1,
             PurchaseItemTable::FINANCE_YEAR => 1
         ];
     }

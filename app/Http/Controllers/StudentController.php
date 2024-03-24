@@ -66,7 +66,7 @@ class StudentController extends Controller
             return redirect()->route('student.index')->with('success', 'Create Success');
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('danger', $e->getMessage());
         }
     }
 
@@ -113,7 +113,7 @@ class StudentController extends Controller
             return redirect()->route('student.index')->with('success', 'Create Success');
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('danger', $e->getMessage());
         }
     }
 
@@ -127,7 +127,7 @@ class StudentController extends Controller
             return redirect()->back()->with('success', 'Delete Success');
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('danger', $e->getMessage());
         }
     }
 }

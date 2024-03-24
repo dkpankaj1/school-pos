@@ -14,9 +14,42 @@
     margin: 0px;
     transform: translate(0px, 62px);
 }
+
 .mobileUserMenu {
     position: absolute;
     inset: -35px 20px auto auto;
     margin: 0px;
     transform: translate(-20px, 62px);
+}
+
+.custom-form-control{
+    font-size: 14px;
+    padding: .5rem;
+    color:  "#adb5bd";
+}
+
+.custom-cart-input{
+    width: "5rem" !important;
+    border: "none" !important;
+}
+
+/* search product */
+.searchResultContainer {
+    /* display: none; */
+    width: 100%;
+    border: solid 1px #adb5bd;
+    border-radius: 5px;
+    max-height: 10rem;
+    overflow-y: scroll;
+}
+
+.searchResultItem {
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.searchResultItem:hover {
+    background-color: #ff9f43;
+    color: #fff;
 }

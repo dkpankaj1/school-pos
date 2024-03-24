@@ -27,7 +27,6 @@ class PurchaseFactory extends Factory
             // PurchaseTable::SUPPLIER_ID => Supplier::factory(),
             PurchaseTable::OTHER_AMOUNT => $this->faker->numberBetween(0,500),
             PurchaseTable::DISCOUNT => $this->faker->numberBetween(0,100),
-            PurchaseTable::DISCOUNT_TYPE => $this->faker->randomElement([DiscountTypeEnum::FIXED,DiscountTypeEnum::PERCENT]),
             PurchaseTable::TOTAL_AMOUNT => $this->faker->numberBetween(100,2000),
             PurchaseTable::PAID_AMOUNT => $this->faker->numberBetween(100,2000),
             PurchaseTable::ORDER_STATUS => $this->faker->randomElement([OrderStatusEnum::PENDING,OrderStatusEnum::ORDER,OrderStatusEnum::RECEIVED]),
