@@ -59,7 +59,7 @@ class StudentController extends Controller
                 StudentTable::ENROLMENT_NO =>$request->enrolment,
                 StudentTable::CLASSES =>$request->class,
                 StudentTable::FATHER =>$request->father,
-                StudentTable::REMARK =>$request->remark,
+                StudentTable::REMARK =>$request->remark ?? "No Remark",
                 StudentTable::FINANCE_YEAR => $this->getFinanceYear()
             ]);
             
