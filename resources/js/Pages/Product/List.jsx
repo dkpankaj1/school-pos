@@ -71,8 +71,8 @@ function List({ products }) {
                                             <td>
                                                 <AvailableStock
                                                     stock={
-                                                        product.stock
-                                                            ?.quantity || 0
+                                                        product.stock_sum_quantity ||
+                                                        0
                                                     }
                                                 />
                                             </td>

@@ -37,8 +37,8 @@ class Product extends Model
         return $this->hasMany(PurchaseItem::class,PurchaseItemTable::PRODUCT_ID,'id');
     }
 
-    public function stock()
+    public function stocks()
     {
-        return $this->hasOne(Stock::class,StockTable::PRODUCT_ID,'id');
+        return $this->hasMany(Stock::class,StockTable::PRODUCT_ID,'id');
     }
 }
