@@ -25,13 +25,13 @@ class ProductController extends Controller
     public function index(Request $request)
     {
 
-        $productQuery = Product::query()->with('category', 'unit')->where(ProductTable::FINANCE_YEAR, $this->getFinanceYear());
+        $productQuery = Product::query()->with('category', 'unit','stock')->where(ProductTable::FINANCE_YEAR, $this->getFinanceYear());
 
         $products = Pipeline::send($productQuery)->through([
             ByOrCode::class,
             ByName::class,
         ])->thenReturn()->paginate(5)->withQueryString();
-
+        // dd($products);
         return Inertia::render('Product/List', ['products' => $products]);
     }
 

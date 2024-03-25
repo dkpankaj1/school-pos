@@ -7,10 +7,9 @@ import DeleteBtn from "../Component/DeleteBtn";
 import EditBtn from "../Component/EditBtn";
 import BasicFilter from "../Component/BasicFilter";
 import Pagination from "../Component/Pagination";
+import AvailableStock from "../Component/AvailableStock";
 
 function List({ products }) {
-
-
     return (
         <AppLayout>
             <Head>
@@ -31,7 +30,7 @@ function List({ products }) {
 
             <div className="card">
                 <div className="card-body">
-                  <BasicFilter routeName={"products.index"}/>
+                    <BasicFilter routeName={"products.index"} />
 
                     <div className="table-responsive mb-3">
                         <table className="table">
@@ -40,6 +39,7 @@ function List({ products }) {
                                     <th>Image</th>
                                     <th>Code</th>
                                     <th>Name</th>
+                                    <th>Available</th>
                                     <th>Categories</th>
                                     <th>Unit</th>
                                     <th>Purchase Price</th>
@@ -68,6 +68,14 @@ function List({ products }) {
                                             </td>
                                             <td>{product.code}</td>
                                             <td>{product.name}</td>
+                                            <td>
+                                                <AvailableStock
+                                                    stock={
+                                                        product.stock
+                                                            ?.quantity || 0
+                                                    }
+                                                />
+                                            </td>
                                             <td>{product.category.name}</td>
                                             <td>{product.unit.short_name}</td>
                                             <td>{product.cost}</td>
@@ -90,7 +98,7 @@ function List({ products }) {
                             </tbody>
                         </table>
                     </div>
-                  <Pagination links={products.links}/>
+                    <Pagination links={products.links} />
                 </div>
             </div>
         </AppLayout>

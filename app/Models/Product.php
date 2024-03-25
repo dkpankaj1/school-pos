@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\DatabaseEnum\ProductTable;
 use App\Enums\DatabaseEnum\PurchaseItemTable;
+use App\Enums\DatabaseEnum\StockTable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,5 +35,10 @@ class Product extends Model
     public function purchaseItems()
     {
         return $this->hasMany(PurchaseItem::class,PurchaseItemTable::PRODUCT_ID,'id');
+    }
+
+    public function stock()
+    {
+        return $this->hasOne(Stock::class,StockTable::PRODUCT_ID,'id');
     }
 }
