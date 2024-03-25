@@ -262,6 +262,10 @@ function Edit({ purchase, suppliers, products }) {
                                             Sale Price({setting.currency_symbol}
                                             )
                                         </th>
+                                          <th>
+                                            Total({setting.currency_symbol}
+                                            )
+                                        </th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -336,6 +340,7 @@ function Edit({ purchase, suppliers, products }) {
                                                         }
                                                     />
                                                 </th>
+                                                <th>{parseFloat(item.quantity) * parseFloat(item.cost)}</th>
                                                 <th>
                                                     <button
                                                         className=" btn p-0 delete-set"

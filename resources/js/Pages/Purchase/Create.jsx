@@ -262,98 +262,122 @@ function Create({ suppliers, products }) {
                                             Sale Price({setting.currency_symbol}
                                             )
                                         </th>
+                                        <th>
+                                            Total({setting.currency_symbol})
+                                        </th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data.cart_items.map((item, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <th>{index + 1}</th>
-                                                <th>{item.name}</th>
-                                                <th>{item.code}</th>
-                                                <th>
-                                                    <input
-                                                        type="number"
-                                                        style={{
-                                                            width: "5rem",
-                                                            border: "none",
-                                                            padding: ".25rem",
-                                                        }}
-                                                        value={item.quantity}
-                                                        onChange={(e) =>
-                                                            handleModifyCartItem(
-                                                                index,
-                                                                "quantity",
-                                                                parseInt(
-                                                                    e.target
-                                                                        .value
+                                    {data.cart_items.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={8} className="text-center">
+                                                no selected items
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        data.cart_items.map((item, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <th>{index + 1}</th>
+                                                    <th>{item.name}</th>
+                                                    <th>{item.code}</th>
+                                                    <th>
+                                                        <input
+                                                            type="number"
+                                                            style={{
+                                                                width: "5rem",
+                                                                border: "none",
+                                                                padding:
+                                                                    ".25rem",
+                                                            }}
+                                                            value={
+                                                                item.quantity
+                                                            }
+                                                            onChange={(e) =>
+                                                                handleModifyCartItem(
+                                                                    index,
+                                                                    "quantity",
+                                                                    parseInt(
+                                                                        e.target
+                                                                            .value
+                                                                    )
                                                                 )
-                                                            )
-                                                        }
-                                                    />
-                                                </th>
-                                                <th>
-                                                    {" "}
-                                                    <input
-                                                        type="number"
-                                                        style={{
-                                                            width: "5rem",
-                                                            border: "none",
-                                                            padding: ".25rem",
-                                                        }}
-                                                        value={item.cost}
-                                                        onChange={(e) =>
-                                                            handleModifyCartItem(
-                                                                index,
-                                                                "cost",
-                                                                parseFloat(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            )
-                                                        }
-                                                    />
-                                                </th>
-                                                <th>
-                                                    <input
-                                                        type="number"
-                                                        style={{
-                                                            width: "5rem",
-                                                            border: "none",
-                                                            padding: ".25rem",
-                                                        }}
-                                                        value={item.mrp}
-                                                        onChange={(e) =>
-                                                            handleModifyCartItem(
-                                                                index,
-                                                                "mrp",
-                                                                parseFloat(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            )
-                                                        }
-                                                    />
-                                                </th>
-                                                <th>
-                                                    <button
-                                                        className=" btn p-0 delete-set"
-                                                        onClick={() =>
-                                                            handleRemoveFromCart(
-                                                                index
-                                                            )
-                                                        }
-                                                    >
-                                                        <img
-                                                            src={DeleteIcon}
-                                                            alt="svg"
+                                                            }
                                                         />
-                                                    </button>
-                                                </th>
-                                            </tr>
-                                        );
-                                    })}
+                                                    </th>
+                                                    <th>
+                                                        {" "}
+                                                        <input
+                                                            type="number"
+                                                            style={{
+                                                                width: "5rem",
+                                                                border: "none",
+                                                                padding:
+                                                                    ".25rem",
+                                                            }}
+                                                            value={item.cost}
+                                                            onChange={(e) =>
+                                                                handleModifyCartItem(
+                                                                    index,
+                                                                    "cost",
+                                                                    parseFloat(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                )
+                                                            }
+                                                        />
+                                                    </th>
+                                                    <th>
+                                                        <input
+                                                            type="number"
+                                                            style={{
+                                                                width: "5rem",
+                                                                border: "none",
+                                                                padding:
+                                                                    ".25rem",
+                                                            }}
+                                                            value={item.mrp}
+                                                            onChange={(e) =>
+                                                                handleModifyCartItem(
+                                                                    index,
+                                                                    "mrp",
+                                                                    parseFloat(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                )
+                                                            }
+                                                        />
+                                                    </th>
+                                                    <th>
+                                                        {parseFloat(
+                                                            item.quantity
+                                                        ) *
+                                                            parseFloat(
+                                                                item.cost
+                                                            )}
+                                                    </th>
+                                                    <th>
+                                                        <button
+                                                            className=" btn p-0 delete-set"
+                                                            onClick={() =>
+                                                                handleRemoveFromCart(
+                                                                    index
+                                                                )
+                                                            }
+                                                        >
+                                                            <img
+                                                                src={DeleteIcon}
+                                                                alt="svg"
+                                                            />
+                                                        </button>
+                                                    </th>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
                                 </tbody>
                             </table>
                         </div>

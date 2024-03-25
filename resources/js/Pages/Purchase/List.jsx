@@ -220,11 +220,11 @@ function List({ purchases, suppliers }) {
                                                 />
                                             </td>
                                             <td>
-                                                <ShowBtn
+                                                {/* <ShowBtn
                                                     routeUrl={route(
                                                         "purchases.index"
                                                     )}
-                                                />
+                                                /> */}
                                                 <EditBtn
                                                     url={route(
                                                         "purchases.edit",
