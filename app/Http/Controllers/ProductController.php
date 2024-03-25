@@ -31,7 +31,7 @@ class ProductController extends Controller
             ByOrCode::class,
             ByName::class,
         ])->thenReturn()->paginate(5)->withQueryString();
-        // dd($products);
+        
         return Inertia::render('Product/List', ['products' => $products]);
     }
 
