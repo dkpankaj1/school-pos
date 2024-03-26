@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign(StockTable::PRODUCT_ID)->references('id')->on(ProductTable::TABLE);
-            $table->foreign(StockTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE)->cascadeOnDelete();
+            $table->foreign(StockTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE);
         });
     }
 

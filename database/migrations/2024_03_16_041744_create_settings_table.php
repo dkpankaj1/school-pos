@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string(SettingTable::CURRENCY_CODE)->nullable();
             $table->string(SettingTable::CURRENCY_SYMBOL)->nullable();
             $table->unsignedBigInteger(SettingTable::DEFAULT_FINANCE_YEAR)->nullable();
-            $table->foreign(SettingTable::DEFAULT_FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE)->cascadeOnDelete();
+            $table->foreign(SettingTable::DEFAULT_FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE);
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SearchProductController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentClassController;
@@ -30,6 +31,7 @@ Route::middleware('auth')->group(function () {
    Route::resource('units',UnitController::class);   
    Route::resource('products',ProductController::class);
    Route::resource('purchases',PurchaseController::class);
+   Route::resource('sales',SaleController::class);
    Route::resource('student-class',StudentClassController::class);   
    Route::resource('student',StudentController::class);   
    Route::resource('suppliers',SupplierController::class);   

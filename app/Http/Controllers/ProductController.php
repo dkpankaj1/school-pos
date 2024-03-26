@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Enums\DatabaseEnum\CategoriesTable;
 use App\Enums\DatabaseEnum\ProductTable;
+use App\Enums\DatabaseEnum\StockTable;
 use App\Enums\DatabaseEnum\UnitTable;
 use App\Enums\ImageEnum;
 use App\Filters\ByOrCode;
 use App\Filters\ByName;
+use App\Http\Resources\ProductResource;
 use App\Models\Categories;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Pipeline;
@@ -25,13 +28,13 @@ class ProductController extends Controller
     public function index(Request $request)
     {
 
-        $productQuery = Product::query()->with('category', 'unit')->withSum("stocks",'quantity')->where(ProductTable::FINANCE_YEAR, $this->getFinanceYear());
+        $productQuery = Product::query()->with('category', 'unit','stocks')->where(ProductTable::FINANCE_YEAR, $this->getFinanceYear());
 
         $products = Pipeline::send($productQuery)->through([
             ByOrCode::class,
             ByName::class,
         ])->thenReturn()->paginate(5)->withQueryString();
-        return Inertia::render('Product/List', ['products' => $products]);
+        return Inertia::render('Product/List', ['products' => ProductResource::collection($products)]);
     }
 
     /**
@@ -79,7 +82,12 @@ class ProductController extends Controller
                 $data[ProductTable::IMAGE] = $this->imageManager->loadFile($image->getRealPath())->width(200)->height(200)->base64();
             }
 
-            Product::create($data);
+            $product = Product::create($data);
+            Stock::create([
+                StockTable::PRODUCT_ID => $product->id,
+                StockTable::QUANTITY => 0,
+                StockTable::FINANCE_YEAR => $this->getFinanceYear(),
+            ]);
 
             return redirect()->route('products.index')->with('success', 'Create success');
         } catch (\Exception $e) {

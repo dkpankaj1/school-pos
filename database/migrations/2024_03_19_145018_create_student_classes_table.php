@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger(StudentClassTable::FINANCE_YEAR);
             $table->timestamps();
 
-            $table->foreign(StudentClassTable::FINANCE_YEAR)->references("id")->on(FinanceYearTable::TABLE)->cascadeOnDelete();
+            $table->foreign(StudentClassTable::FINANCE_YEAR)->references("id")->on(FinanceYearTable::TABLE);
         });
     }
 

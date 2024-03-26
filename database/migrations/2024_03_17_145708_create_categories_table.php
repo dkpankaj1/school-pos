@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string(CategoriesTable::NAME);
             $table->text( CategoriesTable::DESCRIPTION);
             $table->unsignedBigInteger(CategoriesTable::FINANCE_YEAR);
-            $table->foreign(CategoriesTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE)->cascadeOnDelete();
+            $table->foreign(CategoriesTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE);
             $table->timestamps();
         });
     }

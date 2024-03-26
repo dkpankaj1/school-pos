@@ -29,8 +29,8 @@ return new class extends Migration
             $table->unsignedBigInteger(PurchaseTable::FINANCE_YEAR);
             $table->timestamps();
 
-            $table->foreign(PurchaseTable::SUPPLIER_ID)->references('id')->on(SupplierTable::TABLE)->cascadeOnDelete();
-            $table->foreign(PurchaseTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE)->cascadeOnDelete();
+            $table->foreign(PurchaseTable::SUPPLIER_ID)->references('id')->on(SupplierTable::TABLE);
+            $table->foreign(PurchaseTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE);
             
         });
     }

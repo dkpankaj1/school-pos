@@ -25,10 +25,10 @@ return new class extends Migration
             $table->tinyInteger(PurchaseItemTable::STATUS)->default(0);
             $table->unsignedBigInteger(PurchaseItemTable::FINANCE_YEAR);
             $table->timestamps();
-
-            $table->foreign(PurchaseItemTable::PURCHASE_ID)->references('id')->on(PurchaseTable::TABLE)->cascadeOnDelete();
-            $table->foreign(PurchaseItemTable::PRODUCT_ID)->references('id')->on(ProductTable::TABLE)->cascadeOnDelete();
-            $table->foreign(PurchaseItemTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE)->cascadeOnDelete();
+            
+            $table->foreign(PurchaseItemTable::PURCHASE_ID)->references('id')->on(PurchaseTable::TABLE);
+            $table->foreign(PurchaseItemTable::PRODUCT_ID)->references('id')->on(ProductTable::TABLE);
+            $table->foreign(PurchaseItemTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE);
         });
     }
 

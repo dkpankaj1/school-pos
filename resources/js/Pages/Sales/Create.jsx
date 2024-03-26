@@ -5,32 +5,37 @@ import PageHeader from "../Component/PageHeader";
 import ScannerIcon from "../../../assets/img/icons/scanners.svg";
 import DeleteIcon from "../../../assets/img/icons/delete.svg";
 
-function Create({ suppliers, products }) {
+function Create({ stocks, classes, currentData }) {
     const { setting } = usePage().props;
+    const [student, setStudent] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResult, setSearchResult] = useState([]);
-
-    const { data, setData, post, processing, errors, transform } = useForm({
-        supplier: "",
-        purchase_date: " ",
-        reference: "",
+    const { data, setData, processing } = useForm({
+        student: "",
+        date: currentData,
         status: "",
-        cart_items: [],
         other_charges: 0,
         discount: 0,
         grand_total: 0,
-        notes: "",
+        cart_items: [],
     });
-
-    // Function to handle adding product to cart
+    const handleClassChange = (e) => {
+        const filterStudent = classes.data.filter((studentClass) => {
+            return studentClass.id == e.target.value;
+        });
+        setStudent(filterStudent[0]?.students || []);
+        setData("student", "");
+    };
     const handleAddToCart = (item) => {
+        console.log(item);
         const newItem = {
             id: item.id,
             name: item.name,
             code: item.code,
+            available: item.quantity,
             quantity: 1,
+            unit: item.unit,
             mrp: item.mrp,
-            cost: item.cost,
         };
 
         const found = data.cart_items.some(
@@ -50,29 +55,44 @@ function Create({ suppliers, products }) {
     };
 
     // Function to handle modifying cart item
-    const handleModifyCartItem = (index, field, value) => {
-        if (value != "") {
+    const handleUpdateQuantity = (index, value) => {
+        const timeOutId = setTimeout(() => {
+            const newQnt = value !== "" ? parseFloat(value) : 0;
             const updatedCartItems = [...data.cart_items];
-            updatedCartItems[index][field] = parseFloat(value);
+
+            if (parseFloat(updatedCartItems[index]["available"]) >= newQnt) {
+                updatedCartItems[index]["quantity"] = newQnt;
+            } else {
+                updatedCartItems[index]["quantity"] = 0;
+            }
+
             setData("cart_items", updatedCartItems);
-        }
+        }, 0);
+        return () => clearTimeout(timeOutId);
     };
 
-    const handleSubmit = () => {
-        post(route("purchases.store"), data);
-    };
+    useEffect(() => {
+        let result = 0;
+        data.cart_items.forEach((item) => {
+            result +=
+                (parseFloat(item.mrp) || 0) * (parseFloat(item.quantity) || 1); // Add item cost to result or 0 if NaN
+        });
+        result += parseFloat(data.other_charges) || 0; // Add otherCharges to result or 0 if NaN
+        result -= parseFloat(data.discount) || 0; // Subtract discount from result or 0 if NaN
+        setData("grand_total", result);
+    }, [data.cart_items, data.other_charges, data.discount]);
 
     useEffect(() => {
         if (searchQuery === "") {
             setSearchResult([]);
         } else {
             const timeOutId = setTimeout(() => {
-                const filteredProduct = products.filter((product) => {
+                const filteredProduct = stocks.data.filter((stock) => {
                     return (
-                        product.name
+                        stock.name
                             .toLowerCase()
                             .includes(searchQuery.toLowerCase()) ||
-                        product.code
+                        stock.code
                             .toLowerCase()
                             .includes(searchQuery.toLowerCase())
                     );
@@ -83,42 +103,30 @@ function Create({ suppliers, products }) {
         }
     }, [searchQuery]);
 
-    useEffect(() => {
-        let result = 0;
-        data.cart_items.forEach((item) => {
-            result +=
-                (parseFloat(item.cost) || 0) * (parseFloat(item.quantity) || 1); // Add item cost to result or 0 if NaN
-        });
-        result += parseFloat(data.other_charges) || 0; // Add otherCharges to result or 0 if NaN
-        result -= parseFloat(data.discount) || 0; // Subtract discount from result or 0 if NaN
-        setData("grand_total", result);
-    }, [data.cart_items, data.other_charges, data.discount]);
+    const handleSubmit = () => {
+        console.log(data);
+    };
 
     return (
         <AppLayouts>
             <Head>
-                <title>New Purchase - Dashboard</title>
+                <title>New Sale - Dashboard</title>
             </Head>
 
-            <PageHeader
-                title={"New Purchase"}
-                subtitle={"Create new purchase"}
-            />
+            <PageHeader title={"New Sale"} subtitle={"Create new Sale"} />
+
             <div className="card">
                 <div className="card-body">
                     <div className="row">
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="form-group">
-                                <label>Supplier Name</label>
+                                <label>Class</label>
                                 <select
                                     className="form-control custom-form-control"
-                                    defaultValue={data.supplier}
-                                    onChange={(e) =>
-                                        setData("supplier", e.target.value)
-                                    }
+                                    onChange={handleClassChange}
                                 >
                                     <option value="">Select</option>
-                                    {suppliers.map((item, index) => {
+                                    {classes.data.map((item, index) => {
                                         return (
                                             <option key={index} value={item.id}>
                                                 {item.name}
@@ -126,11 +134,28 @@ function Create({ suppliers, products }) {
                                         );
                                     })}
                                 </select>
-                                {errors.supplier && (
-                                    <div className="invalid-feedback d-block">
-                                        {errors.supplier}
-                                    </div>
-                                )}
+                            </div>
+                        </div>
+
+                        <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="form-group">
+                                <label>Student</label>
+                                <select
+                                    className="form-control custom-form-control"
+                                    value={data.student}
+                                    onChange={(e) => {
+                                        setData("student", e.target.value);
+                                    }}
+                                >
+                                    <option value="">Select</option>
+                                    {student.map((item, index) => {
+                                        return (
+                                            <option key={index} value={item.id}>
+                                                {item.name} :: {item.enrolment}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
                             </div>
                         </div>
 
@@ -139,42 +164,15 @@ function Create({ suppliers, products }) {
                                 <label>Purchase Date </label>
                                 <div className="input-groupicon">
                                     <input
-                                        value={data.purchase_date}
-                                        onChange={(e) =>
-                                            setData(
-                                                "purchase_date",
-                                                e.target.value
-                                            )
-                                        }
                                         type="date"
                                         placeholder="DD-MM-YYYY"
                                         className="form-control custom-form-control"
+                                        value={data.date}
+                                        onChange={(e) =>
+                                            setData("date", e.target.value)
+                                        }
                                     />
                                 </div>
-                                {errors.purchase_date && (
-                                    <div className="invalid-feedback d-block">
-                                        {errors.purchase_date}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-sm-6 col-12">
-                            <div className="form-group">
-                                <label>Reference No.</label>
-                                <input
-                                    value={data.reference}
-                                    onChange={(e) =>
-                                        setData("reference", e.target.value)
-                                    }
-                                    type="text"
-                                    className="form-control custom-form-control"
-                                    placeholder="Enter Reference Number"
-                                />
-                                {errors.reference && (
-                                    <div className="invalid-feedback d-block">
-                                        {errors.reference}
-                                    </div>
-                                )}
                             </div>
                         </div>
 
@@ -183,7 +181,7 @@ function Create({ suppliers, products }) {
                                 <label>Order Status</label>
                                 <select
                                     className="form-control custom-form-control"
-                                    defaultValue={data.status}
+                                    value={data.status}
                                     onChange={(e) =>
                                         setData("status", e.target.value)
                                     }
@@ -193,11 +191,6 @@ function Create({ suppliers, products }) {
                                     <option value="order">Order</option>
                                     <option value="received">Received</option>
                                 </select>
-                                {errors.status && (
-                                    <div className="invalid-feedback d-block">
-                                        {errors.status}
-                                    </div>
-                                )}
                             </div>
                         </div>
 
@@ -236,12 +229,6 @@ function Create({ suppliers, products }) {
                                         })}
                                     </ul>
                                 )}
-
-                                {errors.cart_items && (
-                                    <div className="invalid-feedback d-block">
-                                        {errors.cart_items}
-                                    </div>
-                                )}
                             </div>
                         </div>
                     </div>
@@ -253,15 +240,13 @@ function Create({ suppliers, products }) {
                                         <th>ID</th>
                                         <th>Product Name</th>
                                         <th>Product Code</th>
-                                        <th>QTY</th>
+                                        <th>Available</th>
+                                        <th>Unit</th>
                                         <th>
-                                            Purchase Price(
+                                            Price(
                                             {setting.currency_symbol})
                                         </th>
-                                        <th>
-                                            Sale Price({setting.currency_symbol}
-                                            )
-                                        </th>
+                                        <th>QTY</th>
                                         <th>
                                             Total({setting.currency_symbol})
                                         </th>
@@ -271,7 +256,10 @@ function Create({ suppliers, products }) {
                                 <tbody>
                                     {data.cart_items.length === 0 ? (
                                         <tr>
-                                            <td colSpan={8} className="text-center">
+                                            <td
+                                                colSpan={8}
+                                                className="text-center"
+                                            >
                                                 no selected items
                                             </td>
                                         </tr>
@@ -282,6 +270,9 @@ function Create({ suppliers, products }) {
                                                     <th>{index + 1}</th>
                                                     <th>{item.name}</th>
                                                     <th>{item.code}</th>
+                                                    <th>{item.available}</th>
+                                                    <th>{item.unit}</th>
+                                                    <th>{item.mrp}</th>
                                                     <th>
                                                         <input
                                                             type="number"
@@ -295,74 +286,23 @@ function Create({ suppliers, products }) {
                                                                 item.quantity
                                                             }
                                                             onChange={(e) =>
-                                                                handleModifyCartItem(
+                                                                handleUpdateQuantity(
                                                                     index,
-                                                                    "quantity",
-                                                                    parseInt(
-                                                                        e.target
-                                                                            .value
-                                                                    )
+                                                                    e.target
+                                                                        .value
                                                                 )
                                                             }
                                                         />
                                                     </th>
                                                     <th>
-                                                        {" "}
-                                                        <input
-                                                            type="number"
-                                                            style={{
-                                                                width: "5rem",
-                                                                border: "none",
-                                                                padding:
-                                                                    ".25rem",
-                                                            }}
-                                                            value={item.cost}
-                                                            onChange={(e) =>
-                                                                handleModifyCartItem(
-                                                                    index,
-                                                                    "cost",
-                                                                    parseFloat(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                )
-                                                            }
-                                                        />
+                                                        {item.mrp *
+                                                            item.quantity}
                                                     </th>
-                                                    <th>
-                                                        <input
-                                                            type="number"
-                                                            style={{
-                                                                width: "5rem",
-                                                                border: "none",
-                                                                padding:
-                                                                    ".25rem",
-                                                            }}
-                                                            value={item.mrp}
-                                                            onChange={(e) =>
-                                                                handleModifyCartItem(
-                                                                    index,
-                                                                    "mrp",
-                                                                    parseFloat(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                )
-                                                            }
-                                                        />
-                                                    </th>
-                                                    <th>
-                                                        {parseFloat(
-                                                            item.quantity
-                                                        ) *
-                                                            parseFloat(
-                                                                item.cost
-                                                            )}
-                                                    </th>
+                                                    <th></th>
                                                     <th>
                                                         <button
                                                             className=" btn p-0 delete-set"
-                                                            onClick={() =>
+                                                            onClick={(e) =>
                                                                 handleRemoveFromCart(
                                                                     index
                                                                 )
@@ -395,17 +335,17 @@ function Create({ suppliers, products }) {
                                             <input
                                                 type="number"
                                                 className="float-md-right p-1"
-                                                style={{
-                                                    width: "5rem",
-                                                    border: "none",
-                                                }}
                                                 value={data.other_charges}
                                                 onChange={(e) =>
                                                     setData(
                                                         "other_charges",
-                                                        e.target.value
+                                                        e.target.data
                                                     )
                                                 }
+                                                style={{
+                                                    width: "5rem",
+                                                    border: "none",
+                                                }}
                                             />
                                         </h5>
                                     </li>
@@ -417,17 +357,17 @@ function Create({ suppliers, products }) {
                                             <input
                                                 type="number"
                                                 className="float-md-right p-1"
-                                                style={{
-                                                    width: "5rem",
-                                                    border: "none",
-                                                }}
                                                 value={data.discount}
                                                 onChange={(e) =>
                                                     setData(
                                                         "discount",
-                                                        e.target.value
+                                                        e.target.data
                                                     )
                                                 }
+                                                style={{
+                                                    width: "5rem",
+                                                    border: "none",
+                                                }}
                                             />
                                         </h5>
                                     </li>
@@ -447,23 +387,16 @@ function Create({ suppliers, products }) {
                         <div className="col-lg-12">
                             <div className="form-group">
                                 <label>Description</label>
-                                <textarea
-                                    className="form-control"
-                                    value={data.notes}
-                                    onChange={(e) =>
-                                        setData("notes", e.target.value)
-                                    }
-                                ></textarea>
+                                <textarea className="form-control"></textarea>
                             </div>
                         </div>
                         <div className="col-lg-12">
                             <button
                                 href="#"
                                 className="btn btn-submit me-2"
-                                onClick={handleSubmit}
-                                disabled={processing}
+                                onClick={(e) => handleSubmit}
                             >
-                                {processing ? "Loading..." : "Save"}
+                                {processing ? "Loading.." : "Save"}
                             </button>
                         </div>
                     </div>

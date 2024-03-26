@@ -70,14 +70,11 @@ function List({ products }) {
                                             <td>{product.name}</td>
                                             <td>
                                                 <AvailableStock
-                                                    stock={
-                                                        product.stock_sum_quantity ||
-                                                        0
-                                                    }
+                                                    stock={product.stock}
                                                 />
                                             </td>
-                                            <td>{product.category.name}</td>
-                                            <td>{product.unit.short_name}</td>
+                                            <td>{product.category}</td>
+                                            <td>{product.unit}</td>
                                             <td>{product.cost}</td>
                                             <td>{product.mrp}</td>
                                             <td>
@@ -98,7 +95,7 @@ function List({ products }) {
                             </tbody>
                         </table>
                     </div>
-                    <Pagination links={products.links} />
+                    <Pagination links={products.meta.links} />
                 </div>
             </div>
         </AppLayout>

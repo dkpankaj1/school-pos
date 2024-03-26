@@ -15,15 +15,15 @@ export const menu = [
         url: route('dashboard'),
         icon: DashboardIcon,
     },
-    // {
-    //     label: "Sales",
-    //     url: "",
-    //     icon: SaleIcon,
-    //     sub: [
-    //         { label: "List", url: "#" },
-    //         { label: "New", url: "#" },
-    //     ],
-    // },
+    {
+        label: "Sales",
+        url: "",
+        icon: SaleIcon,
+        sub: [
+            { label: "List", url: route('sales.index') },
+            { label: "New", url: route('sales.create') },
+        ],
+    },
     {
         label: "Purchase",
         url: "",

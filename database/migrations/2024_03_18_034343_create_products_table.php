@@ -27,9 +27,9 @@ return new class extends Migration
             $table->unsignedBigInteger(ProductTable::UNIT);
             $table->unsignedBigInteger(ProductTable::FINANCE_YEAR);
 
-            $table->foreign(ProductTable::CATEGORIES)->references("id")->on(CategoriesTable::TABLE)->cascadeOnDelete();
-            $table->foreign(ProductTable::UNIT)->references("id")->on(UnitTable::TABLE)->cascadeOnDelete();
-            $table->foreign(ProductTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE)->cascadeOnDelete();
+            $table->foreign(ProductTable::CATEGORIES)->references("id")->on(CategoriesTable::TABLE);
+            $table->foreign(ProductTable::UNIT)->references("id")->on(UnitTable::TABLE);
+            $table->foreign(ProductTable::FINANCE_YEAR)->references('id')->on(FinanceYearTable::TABLE);
 
             $table->timestamps();
         });

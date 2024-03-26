@@ -26,7 +26,7 @@ return new class extends Migration
             $table->unsignedBigInteger(SupplierTable::FINANCE_YEAR);
             $table->timestamps();
 
-            $table->foreign(SupplierTable::FINANCE_YEAR)->references("id")->on(FinanceYearTable::TABLE)->cascadeOnDelete();
+            $table->foreign(SupplierTable::FINANCE_YEAR)->references("id")->on(FinanceYearTable::TABLE);
         });
     }
 

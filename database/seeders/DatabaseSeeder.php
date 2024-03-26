@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchaseItem;
 use App\Models\Settings;
+use App\Models\Stock;
 use App\Models\Student;
 use App\Models\StudentClass;
 use App\Models\Supplier;
@@ -81,23 +82,26 @@ class DatabaseSeeder extends Seeder
             [StudentClassTable::NAME => "NURSERY", StudentClassTable::FINANCE_YEAR => 1],
             [StudentClassTable::NAME => "LKG", StudentClassTable::FINANCE_YEAR => 1],
             [StudentClassTable::NAME => "UKG", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 1st", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 2nd", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 3rd", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 4th", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 5th", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 6th", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 7th", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 8th", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 9th", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 10th", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 11th", StudentClassTable::FINANCE_YEAR => 1],
-            [StudentClassTable::NAME => "CLASS 12th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "1st", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "2nd", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "3rd", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "4th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "5th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "6th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "7th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "8th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "9th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "10th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "11th", StudentClassTable::FINANCE_YEAR => 1],
+            [StudentClassTable::NAME => "12th", StudentClassTable::FINANCE_YEAR => 1],
         ]);
 
         Categories::factory(10)->create();
-        Product::factory(10)->create();
-        Student::factory(50)->create();
+
+        Product::factory(100)->has(
+            Stock::factory()->count(1)
+        )->create();
+        Student::factory(500)->create();
         Supplier::factory(5)->create();
     }
 }

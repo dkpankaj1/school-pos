@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string(UnitTable::SHORTNAME);
             $table->string(UnitTable::DESCRIPTION);
             $table->unsignedBigInteger(UnitTable::FINANCE_YEAR);
-            $table->foreign(UnitTable::FINANCE_YEAR)->references("id")->on(FinanceYearTable::TABLE)->cascadeOnDelete();
+            $table->foreign(UnitTable::FINANCE_YEAR)->references("id")->on(FinanceYearTable::TABLE);
             $table->timestamps();
         });
     }
