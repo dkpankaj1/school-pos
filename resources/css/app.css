@@ -22,13 +22,13 @@
     transform: translate(-20px, 62px);
 }
 
-.custom-form-control{
+.custom-form-control {
     font-size: 14px;
     padding: .5rem;
-    color:  "#adb5bd";
+    color: "#adb5bd";
 }
 
-.custom-cart-input{
+.custom-cart-input {
     width: "5rem" !important;
     border: "none" !important;
 }

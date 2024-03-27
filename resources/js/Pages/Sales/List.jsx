@@ -1,5 +1,5 @@
 import React from "react";
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import AppLayout from "../Layouts/AppLayouts";
 import PageHeader from "../Component/PageHeader";
 import AddIcon from "../../../assets/img/icons/plus.svg";
@@ -9,9 +9,15 @@ import ShowBtn from "../Component/ShowBtn";
 import Pagination from "../Component/Pagination";
 import PaymentStatus from "../Component/PaymentStatus";
 import OrderStatus from "../Component/OrderStatus";
-import PaymentBtn from '../Component/PaymentBtn';
+import IconBtn from "../Component/IconBtn";
+import BasicFilter from '../Component/BasicFilter'
+import CreatePaymentIcon from "../../../assets/img/icons/plus-circle.svg";
+import ShowPaymentIcon from "../../../assets/img/icons/dollar-square.svg";
+import DownloadIcon from "../../../assets/img/icons/download.svg";
 
 function List({ sales }) {
+    const {setting} = usePage().props
+
     return (
         <AppLayout>
             <Head>
@@ -32,7 +38,9 @@ function List({ sales }) {
 
             <div className="card">
                 <div className="card-body">
-
+                    {/* filters ::begin */}
+                    <BasicFilter routeName={'sales.index'}/>
+                    {/* filters :: end */}
 
                     <div className="table-responsive mb-3">
                         <table className="table">
@@ -43,9 +51,16 @@ function List({ sales }) {
                                     <th>Class</th>
                                     <th>Student</th>
                                     <th>Order Status</th>
-                                    <th>Total Amount</th>
-                                    <th>Paid Amount</th>
+                                    <th>
+                                        Total Amount ({setting.currency_symbol})
+                                    </th>
+                                    <th>
+                                        Paid Amount ({setting.currency_symbol})
+                                    </th>
+                                    <th>Due ({setting.currency_symbol})</th>
                                     <th>Payment Status</th>
+                                    <th>Payment</th>
+                                    <th>PDF</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -65,19 +80,41 @@ function List({ sales }) {
                                             <td>{sale.student}</td>
                                             <td>
                                                 <OrderStatus
-                                                    status={
-                                                        sale.order_status
-                                                    }
+                                                    status={sale.order_status}
                                                 />
                                             </td>
                                             <td>{sale.total_amount}</td>
                                             <td>{sale.paid_amount}</td>
                                             <td>
+                                                {sale.total_amount -
+                                                    sale.paid_amount}
+                                            </td>
+                                            <td>
                                                 <PaymentStatus
-                                                    status={
-                                                        sale.payment_status
-                                                    }
+                                                    status={sale.payment_status}
                                                 />
+                                            </td>
+                                            <td>
+                                                <IconBtn
+                                                    icon={CreatePaymentIcon}
+                                                    title={"Create Payment"}
+                                                    url={route(
+                                                        "sales.payment.create",
+                                                        sale.id
+                                                    )}
+                                                />
+                                                <IconBtn
+                                                    icon={ShowPaymentIcon}
+                                                    title={"Show All Payment"}
+                                                    url={route('sales.payment.index',sale.id)}
+                                                />
+                                            </td>
+                                            <td>
+                                                {/* <IconBtn
+                                                    icon={DownloadIcon}
+                                                    url={""}
+                                                    title={"Download PDF"}
+                                                /> */}
                                             </td>
                                             <td>
                                                 {/* <ShowBtn
@@ -85,7 +122,6 @@ function List({ sales }) {
                                                         "sales.index"
                                                     )}
                                                 /> */}
-                                                <PaymentBtn url={route('sales.payment.create',sale.id)}/>
                                                 <EditBtn
                                                     url={route(
                                                         "sales.edit",

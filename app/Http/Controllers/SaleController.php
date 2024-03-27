@@ -8,6 +8,7 @@ use App\Enums\DatabaseEnum\StockTable;
 use App\Enums\DatabaseEnum\StudentClassTable;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentStatusEnum;
+use App\Filters\ByReference;
 use App\Helpers\Helpers;
 use App\Http\Resources\SaleResource;
 use App\Http\Resources\SaleWithDetailResource;
@@ -21,6 +22,7 @@ use App\Models\StudentClass;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -28,8 +30,14 @@ class SaleController extends Controller
 {
     public function index(Request $request)
     {
+
+        $saleQuery = Sale::where(SaleTable::FINANCE_YEAR, $this->getFinanceYear());
+        $saleQuery = Pipeline::send($saleQuery)->through([
+            ByReference::class,
+        ])->thenReturn();
+
         return Inertia::render('Sales/List', [
-            'sales' => SaleResource::collection(Sale::where(SaleTable::FINANCE_YEAR, $this->getFinanceYear())->latest()->paginate(10)->withQueryString())
+            'sales' => SaleResource::collection($saleQuery->latest()->paginate(10)->withQueryString()),
         ]);
     }
     public function create()
@@ -252,7 +260,7 @@ class SaleController extends Controller
     public function destroy(Sale $sale)
     {
         try {
-            DB::transaction(function () use ($sale) {  
+            DB::transaction(function () use ($sale) {
                 // revert sale 
                 if ($sale->order_status === OrderStatusEnum::RECEIVED) {
                     foreach ($sale->saleItems as $item) {
@@ -276,6 +284,10 @@ class SaleController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', $e->getMessage());
         }
+    }
+
+    public function print(){
+        
     }
 
 }

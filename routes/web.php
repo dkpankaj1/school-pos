@@ -38,8 +38,11 @@ Route::middleware('auth')->group(function () {
    Route::resource('purchases', PurchaseController::class);
 
    Route::resource('quotations', QuotationController::class);
+   
+   Route::delete('payment/{payment}/sale', [SalePaymentController::class, 'destroy'])->name('sales.payment.destroy');
 
    Route::resource('sales', SaleController::class);
+   Route::get('sales/{sale}/payment/list', [SalePaymentController::class, 'index'])->name('sales.payment.index');
    Route::get('sales/{sale}/payment', [SalePaymentController::class, 'create'])->name('sales.payment.create');
    Route::post('sales/{sale}/payment', [SalePaymentController::class, 'store'])->name('sales.payment.store');
 

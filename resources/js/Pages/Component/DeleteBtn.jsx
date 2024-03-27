@@ -1,5 +1,5 @@
 import React from "react";
-import DeleteIcon from "../../../assets/img/icons/delete.svg";
+import DeleteIcon from "../../../assets/img/icons/delete1.svg";
 import Swal from "sweetalert2";
 import { Link, useForm } from "@inertiajs/react";
 

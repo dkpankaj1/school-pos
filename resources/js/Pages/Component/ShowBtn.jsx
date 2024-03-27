@@ -1,6 +1,6 @@
 import { Link } from "@inertiajs/react";
 import React from "react";
-import ShowIcon from '../../../assets/img/icons/eye.svg';
+import ShowIcon from '../../../assets/img/icons/eye1.svg';
 
 function ShowBtn({routeUrl}) {
     return (
