@@ -12,7 +12,6 @@ import OrderStatus from "../Component/OrderStatus";
 
 function List({ sales }) {
     console.log(sales)
-
     return (
         <AppLayout>
             <Head>
@@ -41,6 +40,7 @@ function List({ sales }) {
                                 <tr>
                                     <th>Date</th>
                                     <th>Reference No.</th>
+                                    <th>Class</th>
                                     <th>Student</th>
                                     <th>Order Status</th>
                                     <th>Total Amount</th>
@@ -50,7 +50,7 @@ function List({ sales }) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* {sales.data.length === 0 ? (
+                                {sales.data.length === 0 ? (
                                     <tr>
                                         <td colSpan="8" className="text-center">
                                             No sale found.
@@ -61,7 +61,8 @@ function List({ sales }) {
                                         <tr key={index}>
                                             <td>{sale.date}</td>
                                             <td>{sale.reference_number}</td>
-                                            <td>{sale.supplier}</td>
+                                            <td>{sale.class}</td>
+                                            <td>{sale.student}</td>
                                             <td>
                                                 <OrderStatus
                                                     status={
@@ -97,11 +98,11 @@ function List({ sales }) {
                                             </td>
                                         </tr>
                                     ))
-                                )} */}
+                                )}
                             </tbody>
                         </table>
                     </div>
-                    <Pagination links={sales.links} />
+                    <Pagination links={sales.meta.links} />
                 </div>
             </div>
         </AppLayout>

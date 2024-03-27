@@ -21,6 +21,7 @@ class DashboardController extends Controller
             'studentCount' => Student::where(StudentTable::FINANCE_YEAR,$this->getFinanceYear())->count(),
             'supplierCount'=> Supplier::where(SupplierTable::FINANCE_YEAR,$this->getFinanceYear())->count(),
             'productCount'=> Product::where(ProductTable::FINANCE_YEAR,$this->getFinanceYear())->count(),
+            'product' => Product::where(ProductTable::FINANCE_YEAR,$this->getFinanceYear())->latest()->take(4)->get()
         ];
 
         return Inertia::render('Dashboard/Dashboard',

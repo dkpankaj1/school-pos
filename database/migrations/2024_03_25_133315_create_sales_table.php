@@ -16,16 +16,16 @@ return new class extends Migration
     {
         Schema::create(SaleTable::TABLE, function (Blueprint $table) {
             $table->id();
-            $table->string(SaleTable::REFERENCE_NUMBER);
+            $table->string(SaleTable::REFERENCE_NUMBER)->unique();
             $table->timestamp(SaleTable::DATE);
             $table->unsignedBigInteger(SaleTable::STUDENT_ID);
-            $table->double(SaleTable::OTHER_AMOUNT);
-            $table->double(SaleTable::DISCOUNT);
-            $table->double(SaleTable::TOTAL_AMOUNT);
-            $table->double(SaleTable::PAID_AMOUNT);
+            $table->double(SaleTable::OTHER_AMOUNT)->default(0);
+            $table->double(SaleTable::DISCOUNT)->default(0);
+            $table->double(SaleTable::TOTAL_AMOUNT)->default(0);
+            $table->double(SaleTable::PAID_AMOUNT)->default(0);
             $table->string(SaleTable::ORDER_STATUS);
             $table->string(SaleTable::PAYMENT_STATUS);
-            $table->string(SaleTable::PURCHASE_NOTE);
+            $table->string(SaleTable::NOTE);
             $table->unsignedBigInteger(SaleTable::FINANCE_YEAR);
             $table->timestamps();
             

@@ -15,7 +15,7 @@ enum SaleTable
     const PAID_AMOUNT = "paid_amount";
     CONST ORDER_STATUS = "order_status";
     const PAYMENT_STATUS = "payment_status";
-    const PURCHASE_NOTE = "purchase_notes";
+    const NOTE = "notes";
     const FINANCE_YEAR = "finance_year_id";
 
 }

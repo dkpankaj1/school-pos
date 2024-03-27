@@ -4,33 +4,33 @@ import AppLayouts from "../Layouts/AppLayouts";
 import PageHeader from "../Component/PageHeader";
 import ScannerIcon from "../../../assets/img/icons/scanners.svg";
 import DeleteIcon from "../../../assets/img/icons/delete.svg";
+import AvailableStock from "../Component/AvailableStock";
 
-function Edit({ purchase, suppliers, products }) {
+function Create({ stocks, classes, sale }) {
+    
+    const saleDate = sale.data;
     const { setting } = usePage().props;
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResult, setSearchResult] = useState([]);
-
-    const { data, setData, put, processing, errors, transform } = useForm({
-        supplier: purchase.data.supplier_id,
-        purchase_date: purchase.data.date,
-        reference: purchase.data.reference_number,
-        status: purchase.data.order_status,
-        cart_items: purchase.data.purchase_items,
-        other_charges: purchase.data.other_amount,
-        discount: purchase.data.discount,
-        grand_total: purchase.data.total_amount,
-        notes: purchase.data.purchase_notes,
+    const { data, setData, put, processing, errors } = useForm({
+        date: saleDate.date,
+        status: saleDate.order_status,
+        other_charges: saleDate.other_amount,
+        discount: saleDate.discount,
+        grand_total: saleDate.total_amount,
+        note: saleDate.note,
+        cart_items: saleDate.sale_items,
     });
 
-    // Function to handle adding product to cart
     const handleAddToCart = (item) => {
         const newItem = {
             id: item.id,
             name: item.name,
             code: item.code,
+            available: item.quantity,
             quantity: 1,
+            unit: item.unit,
             mrp: item.mrp,
-            cost: item.cost,
         };
 
         const found = data.cart_items.some(
@@ -50,29 +50,44 @@ function Edit({ purchase, suppliers, products }) {
     };
 
     // Function to handle modifying cart item
-    const handleModifyCartItem = (index, field, value) => {
-        if (value != "") {
+    const handleUpdateQuantity = (index, value) => {
+        const timeOutId = setTimeout(() => {
+            const newQnt = value !== "" ? parseFloat(value) : 0;
             const updatedCartItems = [...data.cart_items];
-            updatedCartItems[index][field] = parseFloat(value);
+
+            if (parseFloat(updatedCartItems[index]["available"]) >= newQnt) {
+                updatedCartItems[index]["quantity"] = newQnt;
+            } else {
+                updatedCartItems[index]["quantity"] = 0;
+            }
+
             setData("cart_items", updatedCartItems);
-        }
+        }, 0);
+        return () => clearTimeout(timeOutId);
     };
 
-    const handleSubmit = () => {
-        put(route("purchases.update", purchase.data.id), data);
-    };
+    useEffect(() => {
+        let result = 0;
+        data.cart_items.forEach((item) => {
+            result +=
+                (parseFloat(item.mrp) || 0) * (parseFloat(item.quantity) || 1); // Add item cost to result or 0 if NaN
+        });
+        result += parseFloat(data.other_charges) || 0; // Add otherCharges to result or 0 if NaN
+        result -= parseFloat(data.discount) || 0; // Subtract discount from result or 0 if NaN
+        setData("grand_total", result);
+    }, [data.cart_items, data.other_charges, data.discount]);
 
     useEffect(() => {
         if (searchQuery === "") {
             setSearchResult([]);
         } else {
             const timeOutId = setTimeout(() => {
-                const filteredProduct = products.filter((product) => {
+                const filteredProduct = stocks.data.filter((stock) => {
                     return (
-                        product.name
+                        stock.name
                             .toLowerCase()
                             .includes(searchQuery.toLowerCase()) ||
-                        product.code
+                        stock.code
                             .toLowerCase()
                             .includes(searchQuery.toLowerCase())
                     );
@@ -83,54 +98,33 @@ function Edit({ purchase, suppliers, products }) {
         }
     }, [searchQuery]);
 
-    useEffect(() => {
-        let result = 0;
-        data.cart_items.forEach((item) => {
-            result +=
-                (parseFloat(item.cost) || 0) * (parseFloat(item.quantity) || 1); // Add item cost to result or 0 if NaN
-        });
-        result += parseFloat(data.other_charges) || 0; // Add otherCharges to result or 0 if NaN
-        result -= parseFloat(data.discount) || 0; // Subtract discount from result or 0 if NaN
-        setData("grand_total", result);
-    }, [data.cart_items, data.other_charges, data.discount]);
+    const handleSubmit = () => {
+        put(route("sales.update",saleDate.id));
+    };
 
     return (
         <AppLayouts>
             <Head>
-                <title>New Purchase - Dashboard</title>
+                <title>Edit Sale - Dashboard</title>
             </Head>
 
-            <PageHeader
-                title={"New Purchase"}
-                subtitle={"Create new purchase"}
-            />
+            <PageHeader title={"Edit Sale"} subtitle={"Edit Sale"} />
+
             <div className="card">
                 <div className="card-body">
                     <div className="row">
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="form-group">
-                                <label>Supplier Name</label>
-                                <select
-                                    className="form-control custom-form-control"
-                                    defaultValue={data.supplier}
-                                    onChange={(e) =>
-                                        setData("supplier", e.target.value)
-                                    }
-                                >
-                                    <option value="">Select</option>
-                                    {suppliers.map((item, index) => {
-                                        return (
-                                            <option key={index} value={item.id}>
-                                                {item.name}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                                {errors.supplier && (
-                                    <div className="invalid-feedback d-block">
-                                        {errors.supplier}
-                                    </div>
-                                )}
+                                <label>Class</label>
+                                <input type="text" disabled={true} value={saleDate.student.class_name} />
+                            </div>
+                        </div>
+
+                        <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="form-group">
+                                <label>Student</label>
+                                <input type="text" disabled={true} value={saleDate.student.student_name} />
+
                             </div>
                         </div>
 
@@ -139,42 +133,20 @@ function Edit({ purchase, suppliers, products }) {
                                 <label>Purchase Date </label>
                                 <div className="input-groupicon">
                                     <input
-                                        value={data.purchase_date}
-                                        onChange={(e) =>
-                                            setData(
-                                                "purchase_date",
-                                                e.target.value
-                                            )
-                                        }
                                         type="date"
                                         placeholder="DD-MM-YYYY"
                                         className="form-control custom-form-control"
+                                        value={data.date}
+                                        onChange={(e) =>
+                                            setData("date", e.target.value)
+                                        }
                                     />
+                                    {errors.date && (
+                                        <div className="invalid-feedback d-block">
+                                            {errors.date}
+                                        </div>
+                                    )}
                                 </div>
-                                {errors.purchase_date && (
-                                    <div className="invalid-feedback d-block">
-                                        {errors.purchase_date}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-sm-6 col-12">
-                            <div className="form-group">
-                                <label>Reference No.</label>
-                                <input
-                                    value={data.reference}
-                                    onChange={(e) =>
-                                        setData("reference", e.target.value)
-                                    }
-                                    type="text"
-                                    className="form-control custom-form-control"
-                                    placeholder="Enter Reference Number"
-                                />
-                                {errors.reference && (
-                                    <div className="invalid-feedback d-block">
-                                        {errors.reference}
-                                    </div>
-                                )}
                             </div>
                         </div>
 
@@ -183,7 +155,7 @@ function Edit({ purchase, suppliers, products }) {
                                 <label>Order Status</label>
                                 <select
                                     className="form-control custom-form-control"
-                                    defaultValue={data.status}
+                                    value={data.status}
                                     onChange={(e) =>
                                         setData("status", e.target.value)
                                     }
@@ -236,7 +208,6 @@ function Edit({ purchase, suppliers, products }) {
                                         })}
                                     </ul>
                                 )}
-
                                 {errors.cart_items && (
                                     <div className="invalid-feedback d-block">
                                         {errors.cart_items}
@@ -253,112 +224,90 @@ function Edit({ purchase, suppliers, products }) {
                                         <th>ID</th>
                                         <th>Product Name</th>
                                         <th>Product Code</th>
-                                        <th>QTY</th>
+                                        <th>Available</th>
+                                        <th>Unit</th>
                                         <th>
-                                            Purchase Price(
+                                            Price(
                                             {setting.currency_symbol})
                                         </th>
+                                        <th>QTY</th>
                                         <th>
-                                            Sale Price({setting.currency_symbol}
-                                            )
-                                        </th>
-                                          <th>
-                                            Total({setting.currency_symbol}
-                                            )
+                                            Total({setting.currency_symbol})
                                         </th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data.cart_items.map((item, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <th>{index + 1}</th>
-                                                <th>{item.name}</th>
-                                                <th>{item.code}</th>
-                                                <th>
-                                                    <input
-                                                        type="number"
-                                                        style={{
-                                                            width: "5rem",
-                                                            border: "none",
-                                                            padding: ".25rem",
-                                                        }}
-                                                        value={item.quantity}
-                                                        onChange={(e) =>
-                                                            handleModifyCartItem(
-                                                                index,
-                                                                "quantity",
-                                                                parseInt(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            )
-                                                        }
-                                                    />
-                                                </th>
-                                                <th>
-                                                    {" "}
-                                                    <input
-                                                        type="number"
-                                                        style={{
-                                                            width: "5rem",
-                                                            border: "none",
-                                                            padding: ".25rem",
-                                                        }}
-                                                        value={item.cost}
-                                                        onChange={(e) =>
-                                                            handleModifyCartItem(
-                                                                index,
-                                                                "cost",
-                                                                parseFloat(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            )
-                                                        }
-                                                    />
-                                                </th>
-                                                <th>
-                                                    <input
-                                                        type="number"
-                                                        style={{
-                                                            width: "5rem",
-                                                            border: "none",
-                                                            padding: ".25rem",
-                                                        }}
-                                                        value={item.mrp}
-                                                        onChange={(e) =>
-                                                            handleModifyCartItem(
-                                                                index,
-                                                                "mrp",
-                                                                parseFloat(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            )
-                                                        }
-                                                    />
-                                                </th>
-                                                <th>{parseFloat(item.quantity) * parseFloat(item.cost)}</th>
-                                                <th>
-                                                    <button
-                                                        className=" btn p-0 delete-set"
-                                                        onClick={() =>
-                                                            handleRemoveFromCart(
-                                                                index
-                                                            )
-                                                        }
-                                                    >
-                                                        <img
-                                                            src={DeleteIcon}
-                                                            alt="svg"
+                                    {data.cart_items.length === 0 ? (
+                                        <tr>
+                                            <td
+                                                colSpan={8}
+                                                className="text-center"
+                                            >
+                                                no selected items
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        data.cart_items.map((item, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <th>{index + 1}</th>
+                                                    <th>{item.name}</th>
+                                                    <th>{item.code}</th>
+                                                    <th>
+                                                        <AvailableStock
+                                                            stock={
+                                                                item.available
+                                                            }
                                                         />
-                                                    </button>
-                                                </th>
-                                            </tr>
-                                        );
-                                    })}
+                                                    </th>
+                                                    <th>{item.unit}</th>
+                                                    <th>{item.mrp}</th>
+                                                    <th>
+                                                        <input
+                                                            type="number"
+                                                            style={{
+                                                                width: "5rem",
+                                                                border: "none",
+                                                                padding:
+                                                                    ".25rem",
+                                                            }}
+                                                            value={
+                                                                item.quantity
+                                                            }
+                                                            onChange={(e) =>
+                                                                handleUpdateQuantity(
+                                                                    index,
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                        />
+                                                    </th>
+                                                    <th>
+                                                        {item.mrp *
+                                                            item.quantity}
+                                                    </th>
+                                                    <th></th>
+                                                    <th>
+                                                        <button
+                                                            className=" btn p-0 delete-set"
+                                                            onClick={(e) =>
+                                                                handleRemoveFromCart(
+                                                                    index
+                                                                )
+                                                            }
+                                                        >
+                                                            <img
+                                                                src={DeleteIcon}
+                                                                alt="svg"
+                                                            />
+                                                        </button>
+                                                    </th>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -369,17 +318,13 @@ function Edit({ purchase, suppliers, products }) {
                                 <ul>
                                     <li>
                                         <h4>
-                                            Order Charges (
+                                            Other Charges (
                                             {setting.currency_symbol})
                                         </h4>
                                         <h5>
                                             <input
                                                 type="number"
                                                 className="float-md-right p-1"
-                                                style={{
-                                                    width: "5rem",
-                                                    border: "none",
-                                                }}
                                                 value={data.other_charges}
                                                 onChange={(e) =>
                                                     setData(
@@ -387,6 +332,10 @@ function Edit({ purchase, suppliers, products }) {
                                                         e.target.value
                                                     )
                                                 }
+                                                style={{
+                                                    width: "5rem",
+                                                    border: "none",
+                                                }}
                                             />
                                         </h5>
                                     </li>
@@ -398,10 +347,6 @@ function Edit({ purchase, suppliers, products }) {
                                             <input
                                                 type="number"
                                                 className="float-md-right p-1"
-                                                style={{
-                                                    width: "5rem",
-                                                    border: "none",
-                                                }}
                                                 value={data.discount}
                                                 onChange={(e) =>
                                                     setData(
@@ -409,6 +354,10 @@ function Edit({ purchase, suppliers, products }) {
                                                         e.target.value
                                                     )
                                                 }
+                                                style={{
+                                                    width: "5rem",
+                                                    border: "none",
+                                                }}
                                             />
                                         </h5>
                                     </li>
@@ -430,9 +379,9 @@ function Edit({ purchase, suppliers, products }) {
                                 <label>Description</label>
                                 <textarea
                                     className="form-control"
-                                    value={data.notes}
+                                    value={data.note}
                                     onChange={(e) =>
-                                        setData("notes", e.target.value)
+                                        setData("note", e.target.value)
                                     }
                                 ></textarea>
                             </div>
@@ -442,9 +391,8 @@ function Edit({ purchase, suppliers, products }) {
                                 href="#"
                                 className="btn btn-submit me-2"
                                 onClick={handleSubmit}
-                                disabled={processing}
                             >
-                                {processing ? "Loading..." : "Submit"}
+                                {processing ? "Loading.." : "Save"}
                             </button>
                         </div>
                     </div>
@@ -454,4 +402,4 @@ function Edit({ purchase, suppliers, products }) {
     );
 }
 
-export default Edit;
+export default Create;

@@ -7,8 +7,6 @@ import Dash2 from "../../../assets/img/icons/dash2.svg";
 import Dash3 from "../../../assets/img/icons/dash3.svg";
 import Dash4 from "../../../assets/img/icons/dash4.svg";
 
-import BoxIcon from "../../../assets/img/icons/box.svg";
-
 import Product22 from "../../../assets/img/product/product22.jpg";
 import Product23 from "../../../assets/img/product/product23.jpg";
 import Product24 from "../../../assets/img/product/product24.jpg";
@@ -39,7 +37,7 @@ function Dashboard({ dashboardData }) {
                                     className="counters"
                                     data-count="307144.00"
                                 >
-                                    307,144.00
+                                    NaN
                                 </span>
                             </h5>
                             <h6>Total Purchase Due</h6>
@@ -57,7 +55,7 @@ function Dashboard({ dashboardData }) {
                             <h5>
                                 {setting.currency_symbol}
                                 <span className="counters" data-count="4385.00">
-                                    4,385.00
+                                    NaN
                                 </span>
                             </h5>
                             <h6>Total Sales Due</h6>
@@ -78,7 +76,7 @@ function Dashboard({ dashboardData }) {
                                     className="counters"
                                     data-count="385656.50"
                                 >
-                                    385,656.50
+                                    NaN
                                 </span>
                             </h5>
                             <h6>Total Sale Amount</h6>
@@ -99,7 +97,7 @@ function Dashboard({ dashboardData }) {
                                     className="counters"
                                     data-count="40000.00"
                                 >
-                                    400.00
+                                    NaN
                                 </span>
                             </h5>
                             <h6>Total Sale Amount</h6>
@@ -170,7 +168,7 @@ function Dashboard({ dashboardData }) {
                 <div className="col-lg-3 col-sm-6 col-12 d-flex">
                     <div className="dash-count das3">
                         <div className="dash-counts">
-                            <h4>105</h4>
+                            <h4>NaN</h4>
                             <h5>Sales Invoice</h5>
                         </div>
                         <div className="dash-imgs">
@@ -225,78 +223,37 @@ function Dashboard({ dashboardData }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td className="productimgname">
-                                                <a
-                                                    href="productlist.html"
-                                                    className="product-img"
-                                                >
-                                                    <img
-                                                        src={Product22}
-                                                        alt="product"
-                                                    />
-                                                </a>
-                                                <a href="productlist.html">
-                                                    Apple Earpods
-                                                </a>
-                                            </td>
-                                            <td>$891.2</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td className="productimgname">
-                                                <a
-                                                    href="productlist.html"
-                                                    className="product-img"
-                                                >
-                                                    <img
-                                                        src={Product23}
-                                                        alt="product"
-                                                    />
-                                                </a>
-                                                <a href="productlist.html">
-                                                    iPhone 11
-                                                </a>
-                                            </td>
-                                            <td>$668.51</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td className="productimgname">
-                                                <a
-                                                    href="productlist.html"
-                                                    className="product-img"
-                                                >
-                                                    <img
-                                                        src={Product24}
-                                                        alt="product"
-                                                    />
-                                                </a>
-                                                <a href="productlist.html">
-                                                    samsung
-                                                </a>
-                                            </td>
-                                            <td>$522.29</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td className="productimgname">
-                                                <a
-                                                    href="productlist.html"
-                                                    className="product-img"
-                                                >
-                                                    <img
-                                                        src={Product6}
-                                                        alt="product"
-                                                    />
-                                                </a>
-                                                <a href="productlist.html">
-                                                    Macbook Pro
-                                                </a>
-                                            </td>
-                                            <td>$291.01</td>
-                                        </tr>
+                                        {dashboardData.product.map(
+                                            (Item, index) => {
+                                                return (
+                                                    <tr>
+                                                        <td>{++index}</td>
+                                                        <td className="productimgname">
+                                                            <a
+                                                                href=""
+                                                                className="product-img"
+                                                            >
+                                                                <img
+                                                                    src={
+                                                                        Item.images
+                                                                    }
+                                                                    alt="product"
+                                                                />
+                                                            </a>
+                                                            <a href="">
+                                                                {Item.name}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            {
+                                                                setting.currency_symbol
+                                                            }
+                                                            {Item.mrp}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
@@ -316,18 +273,12 @@ function Dashboard({ dashboardData }) {
                                     aria-labelledby="dropdownMenuButton"
                                 >
                                     <li>
-                                        <a
-                                            href="productlist.html"
-                                            className="dropdown-item"
-                                        >
+                                        <a href="#" className="dropdown-item">
                                             Product List
                                         </a>
                                     </li>
                                     <li>
-                                        <a
-                                            href="addproduct.html"
-                                            className="dropdown-item"
-                                        >
+                                        <a href="#" className="dropdown-item">
                                             Product Add
                                         </a>
                                     </li>
@@ -336,7 +287,7 @@ function Dashboard({ dashboardData }) {
                         </div>
                         <div className="card-body">
                             <div className="table-responsive dataview">
-                                <table className="table datatable">
+                                <table className="table">
                                     <thead>
                                         <tr>
                                             <th>Sno</th>
@@ -345,78 +296,37 @@ function Dashboard({ dashboardData }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td className="productimgname">
-                                                <a
-                                                    href="productlist.html"
-                                                    className="product-img"
-                                                >
-                                                    <img
-                                                        src={Product22}
-                                                        alt="product"
-                                                    />
-                                                </a>
-                                                <a href="productlist.html">
-                                                    Apple Earpods
-                                                </a>
-                                            </td>
-                                            <td>$891.2</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td className="productimgname">
-                                                <a
-                                                    href="productlist.html"
-                                                    className="product-img"
-                                                >
-                                                    <img
-                                                        src={Product23}
-                                                        alt="product"
-                                                    />
-                                                </a>
-                                                <a href="productlist.html">
-                                                    iPhone 11
-                                                </a>
-                                            </td>
-                                            <td>$668.51</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td className="productimgname">
-                                                <a
-                                                    href="productlist.html"
-                                                    className="product-img"
-                                                >
-                                                    <img
-                                                        src={Product24}
-                                                        alt="product"
-                                                    />
-                                                </a>
-                                                <a href="productlist.html">
-                                                    samsung
-                                                </a>
-                                            </td>
-                                            <td>$522.29</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td className="productimgname">
-                                                <a
-                                                    href="productlist.html"
-                                                    className="product-img"
-                                                >
-                                                    <img
-                                                        src={Product6}
-                                                        alt="product"
-                                                    />
-                                                </a>
-                                                <a href="productlist.html">
-                                                    Macbook Pro
-                                                </a>
-                                            </td>
-                                            <td>$291.01</td>
-                                        </tr>
+                                        {dashboardData.product.map(
+                                            (Item, index) => {
+                                                return (
+                                                    <tr>
+                                                        <td>{++index}</td>
+                                                        <td className="productimgname">
+                                                            <a
+                                                                href=""
+                                                                className="product-img"
+                                                            >
+                                                                <img
+                                                                    src={
+                                                                        Item.images
+                                                                    }
+                                                                    alt="product"
+                                                                />
+                                                            </a>
+                                                            <a href="">
+                                                                {Item.name}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            {
+                                                                setting.currency_symbol
+                                                            }
+                                                            {Item.mrp}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                        )}
                                     </tbody>
                                 </table>
                             </div>

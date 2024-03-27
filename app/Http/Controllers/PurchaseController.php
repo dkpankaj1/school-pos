@@ -230,7 +230,7 @@ class PurchaseController extends Controller
                     $data[PurchaseItemTable::COST] = doubleval($item['cost']);
                     $data[PurchaseItemTable::STATUS] = $purchase->order_status === OrderStatusEnum::RECEIVED ? 1 : 0;
                     $data[PurchaseItemTable::FINANCE_YEAR] = $this->getFinanceYear();
-                    $data['created_at'] = Carbon::now();
+                    $data['updated_at'] = Carbon::now();
                     $cartItem[] = $data;
 
                     if ($purchase->order_status === OrderStatusEnum::RECEIVED) {

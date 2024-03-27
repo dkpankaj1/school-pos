@@ -4,19 +4,21 @@ import AppLayouts from "../Layouts/AppLayouts";
 import PageHeader from "../Component/PageHeader";
 import ScannerIcon from "../../../assets/img/icons/scanners.svg";
 import DeleteIcon from "../../../assets/img/icons/delete.svg";
+import AvailableStock from "../Component/AvailableStock";
 
 function Create({ stocks, classes, currentData }) {
     const { setting } = usePage().props;
     const [student, setStudent] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResult, setSearchResult] = useState([]);
-    const { data, setData, processing } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         student: "",
         date: currentData,
         status: "",
         other_charges: 0,
         discount: 0,
         grand_total: 0,
+        note: "",
         cart_items: [],
     });
     const handleClassChange = (e) => {
@@ -27,7 +29,6 @@ function Create({ stocks, classes, currentData }) {
         setData("student", "");
     };
     const handleAddToCart = (item) => {
-        console.log(item);
         const newItem = {
             id: item.id,
             name: item.name,
@@ -104,7 +105,7 @@ function Create({ stocks, classes, currentData }) {
     }, [searchQuery]);
 
     const handleSubmit = () => {
-        console.log(data);
+        post(route("sales.store"));
     };
 
     return (
@@ -156,6 +157,11 @@ function Create({ stocks, classes, currentData }) {
                                         );
                                     })}
                                 </select>
+                                {errors.student && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.student}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -172,6 +178,11 @@ function Create({ stocks, classes, currentData }) {
                                             setData("date", e.target.value)
                                         }
                                     />
+                                     {errors.date && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.date}
+                                    </div>
+                                )}
                                 </div>
                             </div>
                         </div>
@@ -191,6 +202,11 @@ function Create({ stocks, classes, currentData }) {
                                     <option value="order">Order</option>
                                     <option value="received">Received</option>
                                 </select>
+                                {errors.status && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.status}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -228,6 +244,11 @@ function Create({ stocks, classes, currentData }) {
                                             );
                                         })}
                                     </ul>
+                                )}
+                                 {errors.cart_items && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.cart_items}
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -270,7 +291,13 @@ function Create({ stocks, classes, currentData }) {
                                                     <th>{index + 1}</th>
                                                     <th>{item.name}</th>
                                                     <th>{item.code}</th>
-                                                    <th>{item.available}</th>
+                                                    <th>
+                                                        <AvailableStock
+                                                            stock={
+                                                                item.available
+                                                            }
+                                                        />
+                                                    </th>
                                                     <th>{item.unit}</th>
                                                     <th>{item.mrp}</th>
                                                     <th>
@@ -328,7 +355,7 @@ function Create({ stocks, classes, currentData }) {
                                 <ul>
                                     <li>
                                         <h4>
-                                            Order Charges (
+                                            Other Charges (
                                             {setting.currency_symbol})
                                         </h4>
                                         <h5>
@@ -339,7 +366,7 @@ function Create({ stocks, classes, currentData }) {
                                                 onChange={(e) =>
                                                     setData(
                                                         "other_charges",
-                                                        e.target.data
+                                                        e.target.value
                                                     )
                                                 }
                                                 style={{
@@ -361,7 +388,7 @@ function Create({ stocks, classes, currentData }) {
                                                 onChange={(e) =>
                                                     setData(
                                                         "discount",
-                                                        e.target.data
+                                                        e.target.value
                                                     )
                                                 }
                                                 style={{
@@ -387,14 +414,20 @@ function Create({ stocks, classes, currentData }) {
                         <div className="col-lg-12">
                             <div className="form-group">
                                 <label>Description</label>
-                                <textarea className="form-control"></textarea>
+                                <textarea
+                                    className="form-control"
+                                    value={data.note}
+                                    onChange={(e) =>
+                                        setData("note", e.target.value)
+                                    }
+                                ></textarea>
                             </div>
                         </div>
                         <div className="col-lg-12">
                             <button
                                 href="#"
                                 className="btn btn-submit me-2"
-                                onClick={(e) => handleSubmit}
+                                onClick={handleSubmit}
                             >
                                 {processing ? "Loading.." : "Save"}
                             </button>
