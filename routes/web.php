@@ -5,7 +5,9 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SalePaymentController;
 use App\Http\Controllers\SearchProductController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentClassController;
@@ -18,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('guest')->group(function () {
-   Route::get('/', function(){
+   Route::get('/', function () {
       return redirect()->route('login');
    });
    Route::get('/login', [AuthSessionController::class, 'create'])->name('login');
@@ -27,16 +29,27 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-   Route::resource('categories',CategoriesController::class);
-   Route::resource('units',UnitController::class);   
-   Route::resource('products',ProductController::class);
-   Route::resource('purchases',PurchaseController::class);
-   Route::resource('sales',SaleController::class);
-   Route::resource('student-class',StudentClassController::class);   
-   Route::resource('student',StudentController::class);   
-   Route::resource('suppliers',SupplierController::class);   
-   Route::get('setting',[SettingsController::class,'index'])->name('setting.index');
-   Route::put('setting/update',[SettingsController::class,'update'])->name('setting.update');
+   Route::resource('categories', CategoriesController::class);
+
+   Route::resource('units', UnitController::class);
+
+   Route::resource('products', ProductController::class);
+
+   Route::resource('purchases', PurchaseController::class);
+
+   Route::resource('quotations', QuotationController::class);
+
+   Route::resource('sales', SaleController::class);
+   Route::get('sales/{sale}/payment', [SalePaymentController::class, 'create'])->name('sales.payment.create');
+   Route::post('sales/{sale}/payment', [SalePaymentController::class, 'store'])->name('sales.payment.store');
+
+   Route::resource('student-class', StudentClassController::class);
+
+   Route::resource('student', StudentController::class);
+   
+   Route::resource('suppliers', SupplierController::class);
+   Route::get('setting', [SettingsController::class, 'index'])->name('setting.index');
+   Route::put('setting/update', [SettingsController::class, 'update'])->name('setting.update');
    Route::post('logout', [AuthSessionController::class, 'destroy'])->name('logout');
 });
 

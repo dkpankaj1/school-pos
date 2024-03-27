@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\DatabaseEnum\SaleItemTable;
+use App\Enums\DatabaseEnum\SalePaymentTable;
 use App\Enums\DatabaseEnum\SaleTable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,5 +32,9 @@ class Sale extends Model
     public function saleItems()
     {
         return $this->hasMany(SaleItem::class,SaleItemTable::SALE_ID,'id');
+    }
+    public function payments()
+    {
+        return $this->hasMany(SalePayment::class,SalePaymentTable::SALE_ID,'id');
     }
 }

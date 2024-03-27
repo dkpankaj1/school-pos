@@ -59,7 +59,7 @@ function Create({ suppliers, products }) {
     };
 
     const handleSubmit = () => {
-        post(route("purchases.store"), data);
+        post(route("purchases.store"));
     };
 
     useEffect(() => {

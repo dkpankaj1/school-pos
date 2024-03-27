@@ -9,9 +9,9 @@ import ShowBtn from "../Component/ShowBtn";
 import Pagination from "../Component/Pagination";
 import PaymentStatus from "../Component/PaymentStatus";
 import OrderStatus from "../Component/OrderStatus";
+import PaymentBtn from '../Component/PaymentBtn';
 
 function List({ sales }) {
-    console.log(sales)
     return (
         <AppLayout>
             <Head>
@@ -80,11 +80,12 @@ function List({ sales }) {
                                                 />
                                             </td>
                                             <td>
-                                                <ShowBtn
+                                                {/* <ShowBtn
                                                     routeUrl={route(
                                                         "sales.index"
                                                     )}
-                                                />
+                                                /> */}
+                                                <PaymentBtn url={route('sales.payment.create',sale.id)}/>
                                                 <EditBtn
                                                     url={route(
                                                         "sales.edit",

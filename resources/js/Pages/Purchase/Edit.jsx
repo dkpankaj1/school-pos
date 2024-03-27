@@ -59,7 +59,7 @@ function Edit({ purchase, suppliers, products }) {
     };
 
     const handleSubmit = () => {
-        put(route("purchases.update", purchase.data.id), data);
+        put(route("purchases.update", purchase.data.id));
     };
 
     useEffect(() => {

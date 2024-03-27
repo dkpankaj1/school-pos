@@ -7,6 +7,7 @@ import PurchaseIcon from '../assets/img/icons/purchase1.svg';
 import PeopleIcon from '../assets/img/icons/users1.svg';
 import ReturnIcon from '../assets/img/icons/return1.svg';
 import ReportIcon from '../assets/img/icons/time.svg';
+import QuotationIcon from '../assets/img/icons/quotation1.svg'
 import StudentIcon from '../assets/img/icons/student.svg';
 
 export const menu = [
@@ -31,6 +32,15 @@ export const menu = [
         sub: [
             { label: "List", url: route('purchases.index') },
             { label: "New", url: route('purchases.create') },
+        ],
+    },
+    {
+        label: "Quotation",
+        url: "",
+        icon: QuotationIcon,
+        sub: [
+            { label: "List", url: route('quotations.index') },
+            { label: "New", url: route('quotations.create') },
         ],
     },
     {

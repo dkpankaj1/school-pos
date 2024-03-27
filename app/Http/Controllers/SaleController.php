@@ -8,6 +8,7 @@ use App\Enums\DatabaseEnum\StockTable;
 use App\Enums\DatabaseEnum\StudentClassTable;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentStatusEnum;
+use App\Helpers\Helpers;
 use App\Http\Resources\SaleResource;
 use App\Http\Resources\SaleWithDetailResource;
 use App\Http\Resources\StockResource;
@@ -224,6 +225,7 @@ class SaleController extends Controller
                 // Update grand total in the sale record
                 $sale->update([
                     SaleTable::TOTAL_AMOUNT => $grandTotal + $sale->other_amount - $sale->discount,
+                    SaleTable::PAYMENT_STATUS => Helpers::getPaymentStatus(($grandTotal + $sale->other_amount) - $sale->discount, $sale->paid_amount),
                 ]);
 
                 // Update stock if the order status is 'RECEIVED'
@@ -266,6 +268,7 @@ class SaleController extends Controller
                 }
                 // delete sale items
                 $sale->saleItems()->delete();
+                $sale->payments()->delete();
                 $sale->delete();
             });
 

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger(SaleItemTable::SALE_ID);
             $table->unsignedBigInteger(SaleItemTable::PRODUCT_ID);
             $table->double(SaleItemTable::MRP);
-            $table->unsignedBigInteger(SaleItemTable::QUANTITY);
+            $table->unsignedInteger(SaleItemTable::QUANTITY);
             $table->unsignedBigInteger(SaleItemTable::FINANCE_YEAR);
             $table->timestamps();
             

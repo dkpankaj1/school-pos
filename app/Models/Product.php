@@ -25,11 +25,11 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(Categories::class);
+        return $this->belongsTo(Categories::class,ProductTable::CATEGORIES,'id');
     }
     public function unit()
     {
-        return $this->belongsTo(Unit::class);
+        return $this->belongsTo(Unit::class,ProductTable::UNIT,'id');
     }
 
     public function purchaseItems()

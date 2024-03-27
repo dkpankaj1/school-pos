@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +18,7 @@ class SaleResource extends JsonResource
         return [
             "id" => $this->id,
             'reference_number' => $this->reference_number,
-            'date' => $this->date,
+            'date' => Carbon::parse($this->date)->format('Y-m-d'),
             'student' => $this->student->name,
             'class' => $this->student->classes->name,
             'order_status' => $this->order_status,
