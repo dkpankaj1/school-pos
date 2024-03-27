@@ -10,13 +10,13 @@ import Pagination from "../Component/Pagination";
 import PaymentStatus from "../Component/PaymentStatus";
 import OrderStatus from "../Component/OrderStatus";
 import IconBtn from "../Component/IconBtn";
-import BasicFilter from '../Component/BasicFilter'
+import BasicFilter from "../Component/BasicFilter";
 import CreatePaymentIcon from "../../../assets/img/icons/plus-circle.svg";
 import ShowPaymentIcon from "../../../assets/img/icons/dollar-square.svg";
 import DownloadIcon from "../../../assets/img/icons/download.svg";
 
 function List({ sales }) {
-    const {setting} = usePage().props
+    const { setting } = usePage().props;
 
     return (
         <AppLayout>
@@ -39,7 +39,7 @@ function List({ sales }) {
             <div className="card">
                 <div className="card-body">
                     {/* filters ::begin */}
-                    <BasicFilter routeName={'sales.index'}/>
+                    <BasicFilter routeName={"sales.index"} />
                     {/* filters :: end */}
 
                     <div className="table-responsive mb-3">
@@ -106,15 +106,24 @@ function List({ sales }) {
                                                 <IconBtn
                                                     icon={ShowPaymentIcon}
                                                     title={"Show All Payment"}
-                                                    url={route('sales.payment.index',sale.id)}
+                                                    url={route(
+                                                        "sales.payment.index",
+                                                        sale.id
+                                                    )}
                                                 />
                                             </td>
                                             <td>
-                                                {/* <IconBtn
-                                                    icon={DownloadIcon}
-                                                    url={""}
+                                                <a
+                                                    className="btn me-3 p-0"
+                                                    href={route(
+                                                        "print.sale",
+                                                        sale.id
+                                                    )}
                                                     title={"Download PDF"}
-                                                /> */}
+                                                    target={"_blank"}
+                                                >
+                                                    <img src={DownloadIcon} alt="img" />
+                                                </a>
                                             </td>
                                             <td>
                                                 {/* <ShowBtn

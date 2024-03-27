@@ -41,6 +41,8 @@ Route::middleware('auth')->group(function () {
    
    Route::delete('payment/{payment}/sale', [SalePaymentController::class, 'destroy'])->name('sales.payment.destroy');
 
+   Route::get('print-sale-pdf/{sale}/sale',[SaleController::class,'print'])->name('print.sale');
+
    Route::resource('sales', SaleController::class);
    Route::get('sales/{sale}/payment/list', [SalePaymentController::class, 'index'])->name('sales.payment.index');
    Route::get('sales/{sale}/payment', [SalePaymentController::class, 'create'])->name('sales.payment.create');

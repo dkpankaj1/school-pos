@@ -21,9 +21,9 @@ class QuotationController extends Controller
 {
     public function index()
     {
-        $quotations = Quotation::where(QuotationTable::FINANCE_YEAR,$this->getFinanceYear())->latest()->paginate(10)->withQueryString();
+        $quotations = Quotation::where(QuotationTable::FINANCE_YEAR, $this->getFinanceYear())->latest()->paginate(10)->withQueryString();
 
-        return Inertia::render("Quotation/List",[
+        return Inertia::render("Quotation/List", [
             'quotations' => QuotationResource::collection($quotations)
         ]);
     }
@@ -32,7 +32,7 @@ class QuotationController extends Controller
 
         $products = Product::query()
             ->where(ProductTable::FINANCE_YEAR, $this->getFinanceYear())
-            ->with(['unit','category'])
+            ->with(['unit', 'category'])
             ->get();
 
         return Inertia::render("Quotation/Create", [
@@ -43,7 +43,7 @@ class QuotationController extends Controller
     {
         $request->validate([
             'date' => ['required', 'date'],
-            'code' => ['required', 'string',Rule::unique(Quotation::class,'code')],
+            'code' => ['required', 'string', Rule::unique(Quotation::class, 'code')],
             'other_charges' => ['required', 'numeric', 'min:0'],
             'discount' => ['required', 'numeric', 'min:0'],
             'grand_total' => ['required', 'numeric', 'min:0'],
@@ -100,11 +100,11 @@ class QuotationController extends Controller
     public function edit(Quotation $quotation)
     {
         $products = Product::query()
-        ->where(ProductTable::FINANCE_YEAR, $this->getFinanceYear())
-        ->with(['unit','category'])
-        ->get();
+            ->where(ProductTable::FINANCE_YEAR, $this->getFinanceYear())
+            ->with(['unit', 'category'])
+            ->get();
 
-        return Inertia::render("Quotation/Edit",[
+        return Inertia::render("Quotation/Edit", [
             'quotation' => new EditQuotationResource($quotation),
             "products" => CreateQuotationResource::collection($products)
         ]);
@@ -113,7 +113,7 @@ class QuotationController extends Controller
     {
         $request->validate([
             'date' => ['required', 'date'],
-            'code' => ['required', 'string',Rule::unique(Quotation::class,'code')->ignore($quotation->id)],
+            'code' => ['required', 'string', Rule::unique(Quotation::class, 'code')->ignore($quotation->id)],
             'other_charges' => ['required', 'numeric', 'min:0'],
             'discount' => ['required', 'numeric', 'min:0'],
             'grand_total' => ['required', 'numeric', 'min:0'],
@@ -124,7 +124,7 @@ class QuotationController extends Controller
         ]);
 
         try {
-            DB::transaction(function () use ($request,$quotation) {
+            DB::transaction(function () use ($request, $quotation) {
 
 
                 $quotation->items()->delete();
@@ -171,5 +171,15 @@ class QuotationController extends Controller
     }
     public function destroy(Quotation $quotation)
     {
+        try {
+            DB::transaction(function () use ($quotation) {
+                $quotation->items()->delete();
+                $quotation->delete();
+            });
+
+            return redirect()->route('quotations.index')->with('success', 'delete Success');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', $e->getMessage());
+        }
     }
 }

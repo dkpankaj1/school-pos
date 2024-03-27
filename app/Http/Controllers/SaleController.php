@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SaleController extends Controller
 {
@@ -286,7 +287,14 @@ class SaleController extends Controller
         }
     }
 
-    public function print(){
+    public function print(Sale $sale)
+    {
+        $pdf = Pdf::loadView('pdf.sale.invoice', [
+            'sale' => $sale,
+            'symbol' => 'INR'
+        ])->setPaper('a5');
+
+        return $pdf->download('Invoice_'.$sale->reference_number.'.pdf');
         
     }
 

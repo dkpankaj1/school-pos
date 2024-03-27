@@ -23,4 +23,8 @@ class Controller extends BaseController
     {
         return $this->settings->finance_year_id;
     }
+    public function getCurrencySymbol()
+    {
+        return $this->settings->currency_symbol;
+    }
 }
